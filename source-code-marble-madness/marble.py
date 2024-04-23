@@ -1,8 +1,14 @@
 # Marble Madness
-from pygame import image
+import pgzrun
+from pgzero.game import screen
+from pgzero.screen import Screen
+from pygame import image, Surface
+from pgzero.builtins import keyboard, Actor
+import pgzero.screen
 
 HEIGHT = 570
 WIDTH = 600
+
 game_state = 0
 marble = Actor('marble', center=(300, 45))
 marbleh = Actor('marble', center=(300, 60))
@@ -13,10 +19,10 @@ debug = False
 
 def draw():
     if (debug):
-        screen.blit("height45", (0, 0))
+        screen.blit("height45neu", (0, 0))
         marbleh.draw()
     else:
-        screen.blit("map", (0, 0))
+        screen.blit("mapneu", (0, 0))
         if game_state == 0:
             marble.draw()
         else:
@@ -72,3 +78,8 @@ def move_marble():
 
 def get_height(x, y):
     return heightmap.get_at((int(x), int(y)))
+
+
+surf = Surface(size=[WIDTH, HEIGHT])
+pgzrun.mod.screen = Screen(surface=surf)
+pgzrun.go()
