@@ -19,10 +19,10 @@ debug = False
 
 def draw():
     if (debug):
-        screen.blit("height45neu", (0, 0))
+        screen.blit("height45", (0, 0))
         marbleh.draw()
     else:
-        screen.blit("mapneu", (0, 0))
+        screen.blit("map", (0, 0))
         if game_state == 0:
             marble.draw()
         else:
@@ -43,6 +43,12 @@ def update():
             marble.speed = min(1, marble.speed + 0.1)
         if keyboard.right:
             marble.dir = min(marble.dir + 0.1, 1)
+            marble.speed = min(1, marble.speed + 0.1)
+        if keyboard.up:
+            marbleh.y -= 2
+            marble.speed = min(1, marble.speed + 0.1)
+        if keyboard.down:
+            marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
         marble.speed = max(0, marble.speed - 0.01)
