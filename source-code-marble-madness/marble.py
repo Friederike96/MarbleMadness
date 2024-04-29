@@ -15,6 +15,7 @@ marbleh = Actor('marble', center=(300, 60))
 marble.dir = marble.speed = 0
 heightmap = image.load('images/height45.png')
 debug = False
+timer = 30
 
 
 def draw():
@@ -24,12 +25,16 @@ def draw():
     else:
         screen.blit("map", (0, 0))
         if game_state == 0:
+            screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             marble.draw()
         else:
             if game_state == 2:
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
                 marble.draw()
+            elif game_state == 3:
+                screen.draw.text("GAME OVER!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
+                                 fontsize=80)
             else:
                 screen.draw.text("GAME OVER!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
@@ -37,6 +42,12 @@ def draw():
 
 
 def update():
+    global timer, game_state
+
+    timer -= 1 / 60
+
+    if timer <= 0:
+        game_state = 3
     if game_state == 0:
         if keyboard.left:
             marble.dir = max(marble.dir - 0.1, -1)
