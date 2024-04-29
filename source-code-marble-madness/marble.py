@@ -5,6 +5,8 @@ from pgzero.screen import Screen
 from pygame import image, Surface
 from pgzero.builtins import keyboard, Actor
 import pgzero.screen
+import random
+
 
 HEIGHT = 570
 WIDTH = 600
@@ -16,6 +18,10 @@ marble.dir = marble.speed = 0
 heightmap = image.load('images/height45.png')
 debug = False
 timer = 30
+score = 0
+coin = Actor('coingold')
+coin.x = (150)
+coin.y = (45)
 
 
 def draw():
@@ -26,6 +32,8 @@ def draw():
         screen.blit("map", (0, 0))
         if game_state == 0:
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
+            screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
+            coin.draw()
             marble.draw()
         else:
             if game_state == 2:
@@ -42,12 +50,17 @@ def draw():
 
 
 def update():
-    global timer, game_state
+    global timer, game_state, score
 
     timer -= 1 / 60
-
     if timer <= 0:
         game_state = 3
+
+    if marble.colliderect(coin):
+        coin.x = random.randint(150, 450)
+        coin.y = random.randint(45, 500)
+        score += 1
+
     if game_state == 0:
         if keyboard.left:
             marble.dir = max(marble.dir - 0.1, -1)
