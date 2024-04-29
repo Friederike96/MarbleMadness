@@ -42,13 +42,17 @@ def draw():
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
                 screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
+
                 marble.draw()
             elif game_state == 3:
                 screen.draw.text("GAME OVER!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
+                screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
             else:
                 screen.draw.text("GAME OVER!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
+                screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
+
         screen.blit("overlay", (0, 0))
 
 
