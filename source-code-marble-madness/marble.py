@@ -19,6 +19,7 @@ heightmap = image.load('images/height45.png')
 debug = False
 timer = 30
 score = 0
+coinscore = 0
 coin = Actor('coingold')
 coin.x = (150)
 coin.y = (45)
@@ -33,8 +34,9 @@ def draw():
         if game_state == 0:
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
-            coin.draw()
             marble.draw()
+            if coinscore != 2 :
+                coin.draw()
         else:
             if game_state == 2:
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
@@ -50,16 +52,17 @@ def draw():
 
 
 def update():
-    global timer, game_state, score
+    global timer, game_state, score, coinscore
 
     timer -= 1 / 60
     if timer <= 0:
         game_state = 3
 
-    if marble.colliderect(coin):
+    if marble.colliderect(coin) and score != 2:
         coin.x = random.randint(150, 450)
         coin.y = random.randint(45, 500)
         score += 1
+        coinscore += 1
 
     if game_state == 0:
         if keyboard.left:
