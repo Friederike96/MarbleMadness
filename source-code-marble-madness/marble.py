@@ -1,36 +1,56 @@
 # Marble Madness
 import pgzrun
+import pygame
 from pgzero.game import screen
 from pgzero.screen import Screen
-from pygame import image, Surface
+from pygame import image, Surface, HWSURFACE, DOUBLEBUF, RESIZABLE
 from pgzero.builtins import keyboard, Actor
 import pgzero.screen
 import random
 
 
-HEIGHT = 570
-WIDTH = 600
+# HEIGHT = 570
+# WIDTH = 600
+
+HEIGHT = 760
+WIDTH = 904
+
+level_one = 'images/level_1/map.png'
+level_one_short = 'level_1/map.png'
+level_one_heightmap = 'images/level_1/height45.png'
+
+level_two = 'images/level_2/map.png'
+level_two_short = 'level_2/map.png'
+level_two_heightmap = 'images/level_2/heightmap_skaliert.png'
+level_two_heightmap_short = 'level_2/heightmap_skaliert.png'
+
 
 game_state = 0
-marble = Actor('marble', center=(300, 45))
-marbleh = Actor('marble', center=(300, 60))
+# marble = Actor('objects/marble', center=(300, 45))
+# marbleh = Actor('objects/marble', center=(300, 60))
+heightmap = image.load(level_two_heightmap)
+marble = Actor('objects/marble', center=(310, 20))
+marble.x = 350
+marble.y = 350
+marbleh = Actor('objects/marble', center=(310, 20))
+marbleh.x = 350
+marbleh.y = 50
 marble.dir = marble.speed = 0
-heightmap = image.load('images/height45.png')
 debug = False
 timer = 30
 score = 0
 coinscore = 0
-coin = Actor('coingold')
+coin = Actor('objects/coingold')
 coin.x = (150)
 coin.y = (45)
 
 
 def draw():
     if (debug):
-        screen.blit("height45", (0, 0))
+        screen.blit(level_one_heightmap_short, (0, 0))
         marbleh.draw()
     else:
-        screen.blit("map", (0, 0))
+        screen.blit(level_one_short, (0, 0))
         if game_state == 0:
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
@@ -53,7 +73,8 @@ def draw():
                                  fontsize=80)
                 screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
 
-        screen.blit("overlay", (0, 0))
+        # screen.blit("objects/overlay", (0, 0))
+        screen.blit("objects/overlay", (365, 150))
 
 
 def update():
@@ -120,4 +141,6 @@ def get_height(x, y):
 
 surf = Surface(size=[WIDTH, HEIGHT])
 pgzrun.mod.screen = Screen(surface=surf)
+#screen = Screen(surface=surf)
+# pgzrun.mod.screen.
 pgzrun.go()
