@@ -1,28 +1,25 @@
 # Marble Madness
+import random
+
 import pgzrun
+from pgzero.builtins import keyboard, mouse
 from pgzero.game import screen
 from pgzero.screen import Screen
 from pygame import image, Surface
-from pgzero.builtins import keyboard, Actor, mouse
-import random
-import pgzero.screen
-import state
+
 import game_constants
+import state
 from game_state import GameState
+from level_state import LevelState
+from load_level_files import load_level_files
 
 
 def draw():
-    # if current_level == 0:
-    state.current_map = game_constants.level_one
-    state.current_map_short = game_constants.level_one_short
-    state.current_heightmap = game_constants.level_one_heightmap
-    state.current_heightmap_short = game_constants.level_one_heightmap_short
-
-    heightmap = image.load(state.current_map)
+    load_level_files()
 
     if state.debug:
         screen.blit(state.current_heightmap_short, (0, 0))
-        marbleh.draw()
+        state.marbleh.draw()
 
     else:
         screen.blit(state.current_map_short, (0, 0))
@@ -34,45 +31,40 @@ def draw():
 
             case GameState.MENU_PAGE:
                 screen.fill((0, 0, 0))
-                btn_start.pos = 300, 300
-                btn_start.draw()
-                btn_quit.pos = 300, 400
-                btn_quit.draw()
+                game_constants.start_button.pos = 300, 300
+                game_constants.start_button.draw()
+                game_constants.quit_button.pos = 300, 400
+                game_constants.quit_button.draw()
 
             case GameState.PLACEHOLDER:
                 print("menu maybe?")
 
-            case GameState.LEVEL_ONE:
-                screen.blit("map", (0, 0))
-                screen.draw.text('Time: ' + str(round(timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)
-                screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
-                marble.draw()
-                if coinscore != 2:
-                    coin.draw()
-                marble.draw()
-                # screen.blit("objects/overlay", (0, 0))
-                screen.blit("objects/overlay", (365, 150))
-                curr_level = 1
+            case GameState.LEVEL_GAME:
+                screen.blit(state.current_map_short, (0, 0))
 
-            case GameState.LEVEL_TWO:
-                print("level 2")
+                screen.draw.text('Time: ' + str(round(state.timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)  # todo
+                screen.draw.text('Score: ' + str(state.score), (500, 10), color=(255, 255, 255), fontsize=30)  # todo
 
-            case GameState.LEVEL_THREE:
-                print("level 3")
+                state.marble.draw()
 
-            case GameState.LEVEL_FOUR:
-                print("level 4")
+                if state.coin_score != 2:
+                    state.coin.draw()
+
+                state.marble.draw()
+                screen.blit(game_constants.overlay_image, state.overlay_position)
 
             case GameState.GAME_OVER:
                 screen.fill((0, 0, 0))
                 # überprüfen ob timer auf 0 wenn ja dann game over nicht anzeigen sondern timer over oder so?
                 screen.draw.text("GAME OVER!", center=(300, 300), color='white')
                 screen.draw.text("Do you want to play again?", center=(300, 400), color='white')
-                screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
-                btn_quit.pos = 400, 500
-                btn_quit.draw()
-                btn_play.pos = 200, 500
-                btn_play.draw()
+                screen.draw.text('Score: ' + str(state.score), (500, 10), color=(255, 255, 255), fontsize=30)
+
+                state.quit_button.pos = 400, 500
+                state.quit_button.draw()
+
+                state.play_button.pos = 200, 500
+                state.play_button.draw()
 
             case GameState.WIN:
                 screen.fill((0, 0, 0))
@@ -80,9 +72,7 @@ def draw():
                 screen.draw.text("Press RETURN for start screen!", center=(300, 400), color='white')
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
-                screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
-
-
+                screen.draw.text('Score: ' + str(state.score), (500, 10), color=(255, 255, 255), fontsize=30)
 
 
 def update():
@@ -90,33 +80,36 @@ def update():
     if state.timer <= 0:
         state.game_state = GameState.GAME_OVER
 
-    if marble.colliderect(coin) and score != 2:
-        coin.x = random.randint(150, 450)
-        coin.y = random.randint(45, 500)
-        score += 1
-        coinscore += 1
+    if state.marble.colliderect(state.coin) and state.score != 2:
+        state.coin.x = random.randint(150, 450)
+        state.coin.y = random.randint(45, 500)
+        state.score += 1
+        state.coinscore += 1
 
-    if state.game_state in [GameState.LEVEL_ONE, GameState.LEVEL_TWO, GameState.LEVEL_THREE, GameState.LEVEL_FOUR]:
+    if state.game_state == GameState.LEVEL_GAME:
         if keyboard.left:
-            marble.dir = max(marble.dir - 0.1, -1)
-            marble.speed = min(1, marble.speed + 0.1)
+            state.marble.dir = max(state.marble.dir - 0.1, -1)
+            state.marble.speed = min(1, state.marble.speed + 0.1)
         if keyboard.right:
-            marble.dir = min(marble.dir + 0.1, 1)
-            marble.speed = min(1, marble.speed + 0.1)
+            state.marble.dir = min(state.marble.dir + 0.1, 1)
+            state.marble.speed = min(1, state.marble.speed + 0.1)
         if keyboard.up:
-            marbleh.y -= 2
-            marble.speed = min(1, marble.speed + 0.1)
+            state.marbleh.y -= 2
+            state.marble.speed = min(1, state.marble.speed + 0.1)
         if keyboard.down:
-            marbleh.y += 1.5
-            marble.speed = min(1, marble.speed + 0.1)
+            state.marbleh.y += 1.5
+            state.marble.speed = min(1, state.marble.speed + 0.1)
         move_marble()
-        marble.speed = max(0, marble.speed - 0.01)
+        state.marble.speed = max(0, state.marble.speed - 0.01)
+
     # damit man vom Startbildschirm ins Menü kommt
-    elif game_state == 0 and keyboard.RETURN:
-        game_state = 1
-    elif game_state == 11 and keyboard.RETURN:
-        game_state = 1
-        marble.pos = 300, 45
+    elif state.game_state == GameState.START_PAGE and keyboard.RETURN:
+        state.game_state = GameState.MENU_PAGE
+
+    elif state.game_state == GameState.WIN and keyboard.RETURN:
+        state.game_state = GameState.MENU_PAGE
+        state.current_level = LevelState.LEVEL_ONE
+        marble.pos = 300, 45  # todo: wanted like this? or position of level 1
         marbleh.pos = 300, 60
 
     # print("gameState", game_state)
@@ -124,30 +117,30 @@ def update():
 
 
 def move_marble():
-    center_column = get_height(marbleh.x, marbleh.y)
-    left_column = get_height(marbleh.x - 10, marbleh.y + 10)
-    right_column = get_height(marbleh.x + 10, marbleh.y + 10)
+    center_column = get_height(state.marbleh.x, state.marbleh.y)
+    left_column = get_height(state.marbleh.x - 10, state.marbleh.y + 10)
+    right_column = get_height(state.marbleh.x + 10, state.marbleh.y + 10)
 
     if center_column.r == 0:
         state.game_state = GameState.GAME_OVER
 
     if left_column.r < center_column.r or right_column.r < center_column.r:
-        marble.y += marble.speed
-        marble.speed += 0.03
+        state.marble.y += state.marble.speed
+        state.marble.speed += 0.03
 
-    marbleh.x += marble.speed * marble.dir
-    marbleh.y += marble.speed
-    marble.x = marbleh.x
-    marble.y = (marbleh.y * 0.6) + ((255 - center_column.r) * 1.25)
-    marble.angle = marble.angle + marble.speed * marble.dir * -10
+    state.marbleh.x += state.marble.speed * state.marble.dir
+    state.marbleh.y += state.marble.speed
+    state.marble.x = state.marbleh.x
+    state.marble.y = (state.marbleh.y * 0.6) + ((255 - center_column.r) * 1.25)
+    state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * -10
 
-    if marble.angle > 0:
-        marble.angle = -50
-    elif marble.angle < -50:
-        marble.angle = 0
+    if state.marble.angle > 0:
+        state.marble.angle = -50
+    elif state.marble.angle < -50:
+        state.marble.angle = 0
 
     # Abfrage ob man im Ziel ist
-    if marbleh.y > 610:
+    if state.marbleh.y > 610:  # todo: level abhängig
         state.game_state = GameState.WIN
 
 

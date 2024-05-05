@@ -7,10 +7,7 @@ class GameState(Enum):
     MENU_PAGE = 'menu_page'
 
     # level states
-    LEVEL_ONE = 'level_one'
-    LEVEL_TWO = 'level_two'
-    LEVEL_THREE = 'level_three'
-    LEVEL_FOUR = 'level_four'
+    LEVEL_GAME = 'level_game'
 
     # states for win or lose
     WIN = 'win'
