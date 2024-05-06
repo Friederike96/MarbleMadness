@@ -32,6 +32,8 @@ def draw():
     else:
         screen.blit("map", (0, 0))
         if game_state == 0:
+            sounds.musiclevel1.set_volume(0.1)
+            sounds.musiclevel1.play()
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
             marble.draw()
