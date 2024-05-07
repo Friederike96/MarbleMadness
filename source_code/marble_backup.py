@@ -6,7 +6,7 @@ from pgzero.actor import Actor
 from pgzero.builtins import keyboard, mouse
 from pgzero.game import screen
 from pgzero.screen import Screen
-from pygame import Surface
+from pygame import Surface, Color
 from pygame import image
 
 import source_code.constants.game_constants as game_constants
@@ -49,15 +49,18 @@ quit_button: Actor = Actor(image=game_constants.quit_button_image, center=game_c
 back_button: Actor = Actor(image=game_constants.back_button_image, center=game_constants.back_button_position)
 play_button: Actor = Actor(image=game_constants.play_button_image)
 
+center_column: Color
+left_column: Color
+right_column: Color
 
 
 def load_level_files():
+    global current_level, current_map, current_heightmap, marble, marbleh, timer, overlay_position, heightmap
+
     match current_level:
         case LevelState.LEVEL_ONE:
             current_map = game_constants.level_one
-            current_map_short = game_constants.level_one
             current_heightmap = game_constants.level_one_heightmap
-            current_heightmap_short = game_constants.level_one_heightmap
 
             marble.dir = marble.speed = 0
             marble.x = game_constants.marble_position_level_one[0]
@@ -72,9 +75,7 @@ def load_level_files():
 
         case LevelState.LEVEL_TWO:
             current_map = game_constants.level_two
-            current_map_short = game_constants.level_two
             current_heightmap = game_constants.level_two_heightmap
-            current_heightmap_short = game_constants.level_two_heightmap
 
             marble.dir = marble.speed = 0
             marble.x = game_constants.marble_position_level_two[0]
@@ -99,26 +100,31 @@ def load_level_files():
 
 
 def increment_level():
+    global current_level
+
     match current_level:
         case LevelState.LEVEL_ONE:
-            LevelState.LEVEL_TWO
+            current_level = LevelState.LEVEL_TWO
 
         case LevelState.LEVEL_TWO:
-            LevelState.LEVEL_THREE
+            current_level = LevelState.LEVEL_THREE
 
-        case LevelLEVEL_THREE:
-            LevelState.LEVEL_FOUR
+        case LevelState.LEVEL_THREE:
+            current_level = LevelState.LEVEL_FOUR
 
 
 def draw():
-    load_level_files()
+    global marble, marbleh, current_map, current_heightmap, game_state, start_button, quit_button, coin, coin_score, play_button
+
+    if not game_state == GameState.LEVEL_GAME:
+        load_level_files()
 
     if debug:
-        screen.blit(current_heightmap_short, (0, 0))
+        screen.blit(current_heightmap, (0, 0))
         marbleh.draw()
 
     else:
-        screen.blit(current_map_short, (0, 0))
+        screen.blit(current_map, (0, 0))
 
         match game_state:
             case GameState.START_PAGE:
@@ -131,12 +137,13 @@ def draw():
                 start_button.draw()
                 quit_button.pos = 300, 400
                 quit_button.draw()
+                load_level_files()
 
             case GameState.PLACEHOLDER:
                 print("menu maybe?")
 
             case GameState.LEVEL_GAME:
-                screen.blit(current_map_short, (0, 0))
+                screen.blit(current_map, (0, 0))
 
                 screen.draw.text('Time: ' + str(round(timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)  # todo
                 screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)  # todo
@@ -161,6 +168,7 @@ def draw():
 
                 play_button.pos = 200, 500
                 play_button.draw()
+                load_level_files()
 
             case GameState.LEVEL_WIN:
                 screen.fill((0, 0, 0))
@@ -168,6 +176,7 @@ def draw():
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
                                  fontsize=80)
                 screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
+                load_level_files()
 
             case GameState.GAME_WIN:
                 screen.fill((0, 0, 0))
@@ -178,7 +187,9 @@ def draw():
                 screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
 
 
-def update(game_state=game_state, timer=timer, score=score, coin_score=coin_score):
+def update():
+    global game_state, timer, score, coin_score
+
     if game_state == GameState.LEVEL_GAME:
         timer -= 1 / 60
         if timer <= 0:
@@ -227,6 +238,8 @@ def update(game_state=game_state, timer=timer, score=score, coin_score=coin_scor
 
 
 def move_marble():
+    global marble, marbleh, game_state, current_level, center_column, left_column, right_column
+
     center_column = get_height(marbleh.x, marbleh.y)
     left_column = get_height(marbleh.x - 10, marbleh.y + 10)
     right_column = get_height(marbleh.x + 10, marbleh.y + 10)
@@ -262,6 +275,7 @@ def move_marble():
 
 def on_mouse_down(pos, button):
     # print(button)
+    global game_state, marbleh, marble
 
     # wenn man im Menü auf Enter drückt landet man im Startbildschirm
     if game_state == GameState.MENU_PAGE and quit_button.collidepoint(pos) and mouse.LEFT:
@@ -290,7 +304,11 @@ def on_mouse_down(pos, button):
 
 
 def get_height(x, y):
-    return heightmap.get_at((int(x), int(y)))
+    global heightmap
+    try:
+        return heightmap.get_at((int(x), int(y)))
+    except IndexError:
+        print("IndexError")
 
 
 surf = Surface(size=[game_constants.WIDTH, game_constants.HEIGHT])

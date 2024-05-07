@@ -1,9 +1,11 @@
-# HEIGHT = 570
-# WIDTH = 600
+
 import os
 
-HEIGHT = 760
-WIDTH = 904
+# HEIGHT = 760
+# WIDTH = 904
+
+HEIGHT = 570
+WIDTH = 600
 
 base_path = os.getcwd()
 
