@@ -10,7 +10,8 @@ class GameState(Enum):
     LEVEL_GAME = 'level_game'
 
     # states for win or lose
-    WIN = 'win'
+    LEVEL_WIN = 'level_win'
+    GAME_WIN = 'game_win'
     GAME_OVER = 'game_over'
 
     # placeholder

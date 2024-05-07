@@ -1,8 +1,7 @@
+import source_code.constants.game_constants as game_constants
+import source_code.constants.state as state
+from source_code.enumerations.level_state import LevelState
 from pygame import image
-
-import game_constants
-import state
-from level_state import LevelState
 
 
 def load_level_files():
@@ -10,9 +9,9 @@ def load_level_files():
 
         case LevelState.LEVEL_ONE:
             state.current_map = game_constants.level_one
-            state.current_map_short = game_constants.level_one_short
+            state.current_map_short = game_constants.level_one
             state.current_heightmap = game_constants.level_one_heightmap
-            state.current_heightmap_short = game_constants.level_one_heightmap_short
+            state.current_heightmap_short = game_constants.level_one_heightmap
 
             state.marble.dir = state.marble.speed = 0
             state.marble.x = game_constants.marble_position_level_one[0]
@@ -27,9 +26,9 @@ def load_level_files():
 
         case LevelState.LEVEL_TWO:
             state.current_map = game_constants.level_two
-            state.current_map_short = game_constants.level_two_short
+            state.current_map_short = game_constants.level_two
             state.current_heightmap = game_constants.level_two_heightmap
-            state.current_heightmap_short = game_constants.level_two_heightmap_short
+            state.current_heightmap_short = game_constants.level_two_heightmap
 
             state.marble.dir = state.marble.speed = 0
             state.marble.x = game_constants.marble_position_level_two[0]

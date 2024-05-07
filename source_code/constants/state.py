@@ -1,9 +1,10 @@
 from pgzero.actor import Actor
 from pygame import image
+import os
 
-from game_state import GameState
-from level_state import LevelState
-import game_constants
+import source_code.constants.game_constants as game_constants
+from source_code.enumerations.level_state import LevelState
+from source_code.enumerations.game_state import GameState
 
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
@@ -19,7 +20,7 @@ heightmap: image = None
 overlay_position: set = game_constants.overlay_position_level_one
 
 # marble
-marble: Actor = Actor(game_constants.marble_image, center=game_constants.marble_position_level_one)
+marble: Actor = Actor(image=game_constants.marble_image, center=game_constants.marble_position_level_one)
 marbleh: Actor = Actor(game_constants.marble_image, center=game_constants.marbleh_position_level_one)
 marble.dir = marble.speed = 0
 
