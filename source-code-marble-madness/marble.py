@@ -1,8 +1,6 @@
 # Marble Madness
 import pgzrun
-from pgzero.game import screen
-from pgzero.screen import Screen
-from pygame import image, Surface
+from pygame import image
 from pgzero.builtins import keyboard, Actor, mouse
 import random
 
@@ -30,6 +28,7 @@ coin.x = (150)
 coin.y = (45)
 
 def draw():
+    screen.clear()
     global game_state
     global curr_level
     if debug:
@@ -146,8 +145,8 @@ def move_marble():
     if marbleh.y > 610:
         game_state = 11
 
-# def on_key_down(key):
-    # print(key)
+#def on_key_down(key):
+    #print(key)
 
 def on_mouse_down(pos, button):
     global game_state
@@ -174,8 +173,5 @@ def on_mouse_down(pos, button):
 
 def get_height(x, y):
     return heightmap.get_at((int(x), int(y)))
-
-surf = Surface(size=[WIDTH, HEIGHT])
-pgzrun.mod.screen = Screen(surface=surf)
 
 pgzrun.go()
