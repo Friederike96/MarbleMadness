@@ -33,7 +33,7 @@ score: int = 0
 coin_score: int = 0
 
 # debug mode
-debug: bool = False
+debug: bool = True
 
 # button
 start_button: Actor = Actor(image=game_constants.start_button_image, center=game_constants.start_button_position)
