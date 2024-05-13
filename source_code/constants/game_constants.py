@@ -39,7 +39,7 @@ overlay_position_level_two = (365, 150)
 
 coin_position_level_two = (150, 45)
 
-timer_level_two = 30
+timer_level_two = 40
 
 # menu
 center_position_width = WIDTH/2

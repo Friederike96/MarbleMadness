@@ -26,19 +26,25 @@ current_heightmap: str = ''
 current_heightmap_short: str = ''
 
 current_map_position: set = ()
+
 load_start_position: bool = True
+start_timer: bool = False
+
+marble_start_pos_x: int = 0
+marble_start_pos_y: int = 0
+marbleh_start_pos_x: int = 0
+marbleh_start_pos_y: int = 0
 
 heightmap: image = None
 
-overlay_position: set = game_constants.overlay_position_level_one
-
 # marble
-marble: Actor = Actor(image=game_constants.marble_image)
-marbleh: Actor = Actor(image=game_constants.marble_image)
+marble: Actor = Actor(image=game_constants.marble_image, center=(450, 45))
+marbleh: Actor = Actor(image=game_constants.marble_image, midtop=game_constants.marbleh_position_level_one)
 marble.dir = marble.speed = 0
 
 # coin
-coin: Actor = Actor(game_constants.coin_image, center=game_constants.coin_position_level_one)
+coin: Actor = Actor(image=game_constants.coin_image, center=game_constants.coin_position_level_one)
+start_marble: Actor = Actor(image=game_constants.coin_image, center=(450, 45))
 
 # timer and scores
 timer: int = 0
@@ -57,7 +63,8 @@ play_button: Actor = Actor(image=game_constants.play_button_image)
 
 def load_level_files():
     global current_level, current_map, current_heightmap, marble, marbleh, timer, overlay_position, heightmap, \
-        current_map_position, load_start_position
+        current_map_position, load_start_position, marble_start_pos_x, marble_start_pos_y, marbleh_start_pos_x, marbleh_start_pos_y, \
+    start_timer, start_marble
 
     match current_level:
         case LevelState.LEVEL_ONE:
@@ -66,18 +73,15 @@ def load_level_files():
             current_map_position = game_constants.level_one_map_position
 
             marble.dir = marble.speed = 0
-            #marble.pos = game_constants.marble_position_level_one[0], game_constants.marble_position_level_one[1]
-            #marble.x = game_constants.marble_position_level_one[0]
-            #marble.y = game_constants.marble_position_level_one[1]
-            marble.x = game_constants.marble_position_level_one[0]
-            marble.y = game_constants.marble_position_level_one[1]
-            marbleh.x = game_constants.marble_position_level_one[0]
-            marbleh.y = game_constants.marble_position_level_one[1]
-            load_start_position = True
 
-            #marbleh.pos = game_constants.marbleh_position_level_one[0], game_constants.marbleh_position_level_one[1]
-            #marbleh.x = game_constants.marbleh_position_level_one[0]
-            #marbleh.y = game_constants.marbleh_position_level_one[1]
+            marble_start_pos_x = game_constants.marble_position_level_one[0]
+            marble_start_pos_y = game_constants.marble_position_level_one[0]
+
+            marbleh_start_pos_x = game_constants.marbleh_position_level_one[0]
+            marbleh_start_pos_y = game_constants.marbleh_position_level_one[0]
+
+            load_start_position = True
+            start_timer = False
 
             timer = game_constants.timer_level_one
 
@@ -125,7 +129,9 @@ def increment_level():
 
 
 def draw():
-    global marble, load_start_position, marbleh, current_map, current_heightmap, game_state, start_button, quit_button, coin, coin_score, play_button, current_map_position
+    global marble, load_start_position, marbleh, current_map, current_heightmap, game_state, start_button, quit_button, \
+        coin, coin_score, play_button, current_map_position, marble_start_pos_x, marble_start_pos_y, marbleh_start_pos_x,\
+        marbleh_start_pos_y, start_timer
 
     if not game_state == GameState.LEVEL_GAME:
         load_level_files()
@@ -164,15 +170,21 @@ def draw():
                 screen.draw.text('Score: ' + str(score), ((WIDTH-100), 10), color=(255, 255, 255), fontsize=30)  # todo
 
                 if load_start_position:
-                    marble.pos = game_constants.marble_position_level_one[0], game_constants.marble_position_level_one[1]
+                    marble.pos = marble_start_pos_y, marble_start_pos_y
+                    marbleh.pos = marbleh_start_pos_x, marbleh_start_pos_y
                     load_start_position = False
 
-                marble.draw()
+                    start_marble.draw()
+                    marble.draw()
+
+                if start_timer:
+                    marble.draw()
 
                 if coin_score != 2:
                     coin.draw()
 
-                marble.draw()
+                if start_timer:
+                    marble.draw()
                 # screen.blit(game_constants.overlay_image, overlay_position)
 
             case GameState.GAME_OVER:
@@ -220,9 +232,12 @@ def draw():
 
 
 def update():
-    global game_state, timer, score, coin_score
+    global game_state, timer, score, coin_score, start_timer
 
-    if game_state == GameState.LEVEL_GAME:
+    if not start_timer and keyboard.left or keyboard.right or keyboard.up or keyboard.down:
+        start_timer = True
+
+    if game_state == GameState.LEVEL_GAME and start_timer:
         timer -= 1 / 60
         if timer <= 0:
             game_state = GameState.GAME_OVER
@@ -285,9 +300,9 @@ def move_marble():
     left_column = get_height(marbleh.x - 10, marbleh.y + 10)
     right_column = get_height(marbleh.x + 10, marbleh.y + 10)
 
-    if center_column.r == 0:
-        pass
-        #game_state = GameState.GAME_OVER  # reminder: change back
+    if center_column is None: # or center_column.r == 0:
+        game_state = GameState.GAME_OVER  # reminder: change back
+        return
 
     if left_column.r < center_column.r or right_column.r < center_column.r:
         marble.y += marble.speed
