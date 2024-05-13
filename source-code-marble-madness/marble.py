@@ -22,8 +22,8 @@ timer = 30
 score = 0
 coinscore = 0
 coin = Actor('coingold')
-coin.x = (200)
-coin.y = (130)
+coin.x = (180)
+coin.y = (200)
 
 enemy = Actor('enemy50')
 enemy.x = (130)
@@ -109,8 +109,12 @@ def update():
         sounds.enemysound.play()
 
     timer -= 1 / 60
-    if timer <= 0:
+    if timer <= 0 and game_state == 0:
         game_state = 3
+    elif game_state == 2 :
+        timer = timer
+
+
 
     sounds.sfx_coin_single1.set_volume(0.1)
     if marble.colliderect(coin) and score == 0:
@@ -156,18 +160,14 @@ def update():
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
         if keyboard.up:
-            marbleh.y -= 2
+            marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
         if keyboard.down:
             marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
-        marble.speed = max(0, marble.speed - 0.01)
+        marble.speed = max(0, marble.speed - 0.026)
 
-
-if  enemy.x < 200 and enemy.y > 50 :
-    enemy.x += 2
-    enemy.y -= 2
 
 def move_marble():
     global game_state
