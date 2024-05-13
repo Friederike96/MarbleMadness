@@ -6,6 +6,7 @@ from pygame import image, Surface
 from pgzero.builtins import keyboard, Actor
 import pgzero.screen
 import random
+import math
 
 
 HEIGHT = 570
@@ -21,9 +22,16 @@ timer = 30
 score = 0
 coinscore = 0
 coin = Actor('coingold')
-coin.x = (150)
-coin.y = (45)
+coin.x = (200)
+coin.y = (130)
 
+enemy = Actor('enemy50')
+enemy.x = (130)
+enemy.y = (170)
+
+target_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]
+target_index = 0
+enemyspeed = 1
 
 def draw():
     if (debug):
@@ -32,13 +40,13 @@ def draw():
     else:
         screen.blit("map", (0, 0))
         if game_state == 0:
-            sounds.musiclevel1.set_volume(0.1)
-            sounds.musiclevel1.play()
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
             marble.draw()
-            if coinscore != 2 :
+            enemy.draw()
+            if coinscore != 6 :
                 coin.draw()
+
         else:
             if game_state == 2:
                 screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
@@ -59,15 +67,83 @@ def draw():
 
 
 def update():
-    global timer, game_state, score, coinscore
+    global timer, game_state, score, coinscore, enemy, target_index
+
+    if game_state == 0 :
+        music.play('level1music.mp3')
+        music.set_volume(0.1)
+    elif game_state != 0 :
+        music.stop()
+
+    # Get the current target position
+    target_x, target_y = target_positions[target_index]
+
+    # Calculate the distance between the enemy and the target position
+    distance_x = target_x - enemy.x
+    distance_y = target_y - enemy.y
+
+    angle = math.degrees(math.atan2(-distance_y, distance_x))
+
+    # Adjust the enemy's angle
+    enemy.angle = angle
+
+    # Move the enemy towards the target position
+    if abs(distance_x) > enemyspeed:
+        enemy.x += enemyspeed if distance_x > 0 else - enemyspeed
+    else:
+        enemy.x = target_x
+
+    if abs(distance_y) > enemyspeed:
+        enemy.y += enemyspeed if distance_y > 0 else -enemyspeed
+    else:
+        enemy.y = target_y
+
+    # Check if the enemy has reached the current target position
+    if enemy.x == target_x and enemy.y == target_y:
+        # Move to the next target position
+        target_index = (target_index + 1) % len(target_positions)
+
+    if marble.colliderect(enemy):
+        game_state = 3
+        sounds.enemysound.set_volume(0.1)
+        sounds.enemysound.play()
 
     timer -= 1 / 60
     if timer <= 0:
         game_state = 3
 
-    if marble.colliderect(coin) and score != 2:
-        coin.x = random.randint(150, 450)
-        coin.y = random.randint(45, 500)
+    sounds.sfx_coin_single1.set_volume(0.1)
+    if marble.colliderect(coin) and score == 0:
+        coin.x = 60
+        coin.y = 130
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 1:
+        coin.x = 160
+        coin.y = 45
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 2:
+        coin.x = 300
+        coin.y = 360
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 3:
+        coin.x = 360
+        coin.y = 200
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 4:
+        coin.x = 240
+        coin.y = 520
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 5:
         score += 1
         coinscore += 1
         sounds.sfx_coin_single1.play()
@@ -88,6 +164,10 @@ def update():
         move_marble()
         marble.speed = max(0, marble.speed - 0.01)
 
+
+if  enemy.x < 200 and enemy.y > 50 :
+    enemy.x += 2
+    enemy.y -= 2
 
 def move_marble():
     global game_state
@@ -115,6 +195,12 @@ def move_marble():
 
     if marbleh.y > 610:
         game_state = 2
+
+    if coin.angle != 360:
+        coin.angle = coin.angle + 5
+    if coin.angle == 360:
+        coin.angle = 0
+
 
 
 def get_height(x, y):
