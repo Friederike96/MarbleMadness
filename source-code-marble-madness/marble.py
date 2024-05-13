@@ -7,6 +7,9 @@ import random
 HEIGHT = 570
 WIDTH = 600
 
+joystick = pygame.joystick.Joystick(0)
+joystick.init()
+
 game_state = 0
 curr_level = 0
 
@@ -92,16 +95,16 @@ def update():
         coinscore += 1
 
     if game_state == 3:
-        if keyboard.left:
+        if keyboard.left or joystick.get_axis(0) < -0.1:
             marble.dir = max(marble.dir - 0.1, -1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.right:
+        if keyboard.right or joystick.get_axis(0) > 0.1:
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.up:
+        if keyboard.up or joystick.get_axis(1) < 0.1:
             marbleh.y -= 2
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down:
+        if keyboard.down or joystick.get_axis(1) < -0.1:
             marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
