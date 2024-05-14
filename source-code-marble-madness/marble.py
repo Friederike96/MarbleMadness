@@ -5,9 +5,13 @@ from pgzero.screen import Screen
 from pygame import image, Surface
 from pgzero.builtins import keyboard, Actor, mouse
 import random
+import math
 
 HEIGHT = 570
 WIDTH = 600
+
+#joystick = pygame.joystick.Joystick(0)
+#joystick.init()
 
 game_state = 0
 curr_level = 0
@@ -28,6 +32,16 @@ coinscore = 0
 coin = Actor('coingold')
 coin.x = (150)
 coin.y = (45)
+
+enemy = Actor('enemy50')
+enemy.x = (130)
+enemy.y = (170)
+
+target_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]
+target_index = 0
+enemyspeed = 1
+
+timerlevel1 = 60
 
 def draw():
     global game_state
@@ -52,7 +66,8 @@ def draw():
             screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
             marble.draw()
-            if coinscore != 2:
+            enemy.draw()
+            if coinscore != 6:
                 coin.draw()
             marble.draw()
             curr_level = 1
@@ -80,29 +95,104 @@ def draw():
 
 
 def update():
-    global timer, game_state, score, coinscore
+    global timer, game_state, score, coinscore, enemy, target_index
 
-    timer -= 1 / 60
+    if game_state == 0:
+        music.play('level1music.mp3')
+        music.set_volume(0.1)
+    elif game_state != 0:
+        music.stop()
+
+        # Get the current target position
+    target_x, target_y = target_positions[target_index]
+
+    # Calculate the distance between the enemy and the target position
+    distance_x = target_x - enemy.x
+    distance_y = target_y - enemy.y
+
+    angle = math.degrees(math.atan2(-distance_y, distance_x))
+
+    # Adjust the enemy's angle
+    enemy.angle = angle
+
+    # Move the enemy towards the target position
+    if abs(distance_x) > enemyspeed:
+        enemy.x += enemyspeed if distance_x > 0 else - enemyspeed
+    else:
+        enemy.x = target_x
+
+    if abs(distance_y) > enemyspeed:
+        enemy.y += enemyspeed if distance_y > 0 else -enemyspeed
+    else:
+        enemy.y = target_y
+
+    # Check if the enemy has reached the current target position
+    if enemy.x == target_x and enemy.y == target_y:
+        # Move to the next target position
+        target_index = (target_index + 1) % len(target_positions)
+
+    if marble.colliderect(enemy):
+        game_state = 6
+        sounds.enemysound.set_volume(0.1)
+        sounds.enemysound.play()
+
+    if game_state == 3 :
+        timer -= 1 / 60
+    else :
+        timer = timerlevel1
+
+
     if timer <= 0:
         game_state = 6
 
-    if marble.colliderect(coin) and score != 2:
-        coin.x = random.randint(150, 450)
-        coin.y = random.randint(45, 500)
+    sounds.sfx_coin_single1.set_volume(0.1)
+    if marble.colliderect(coin) and score == 0:
+        coin.x = 60
+        coin.y = 130
         score += 1
         coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 1:
+        coin.x = 160
+        coin.y = 45
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 2:
+        coin.x = 300
+        coin.y = 360
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 3:
+        coin.x = 360
+        coin.y = 200
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 4:
+        coin.x = 240
+        coin.y = 520
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
+    elif marble.colliderect(coin) and score == 5:
+        score += 1
+        coinscore += 1
+        sounds.sfx_coin_single1.play()
 
-    if game_state == 3:
+
+    if game_state == 3 :#or joystick.get_axis(0) < -0.1 :
         if keyboard.left:
             marble.dir = max(marble.dir - 0.1, -1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.right:
+        if keyboard.right :#or joystick.get_axis(0) > 0.1:
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.up:
-            marbleh.y -= 2
+        if keyboard.up :#or joystick.get_axis(1) < 0.1:
+            marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down:
+        if keyboard.down :#or joystick.get_axis(1) < -0.1:
             marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
@@ -129,7 +219,7 @@ def move_marble():
 
     if left_column.r < center_column.r or right_column.r < center_column.r:
         marble.y += marble.speed
-        marble.speed += 0.03
+        marble.speed += 0.02
 
     marbleh.x += marble.speed * marble.dir
     marbleh.y += marble.speed
