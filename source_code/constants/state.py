@@ -11,9 +11,9 @@ current_level: LevelState = LevelState.LEVEL_ONE
 
 # level images
 current_map: str = ''
-current_map_short: str = ''
 current_heightmap: str = ''
-current_heightmap_short: str = ''
+
+current_map_position: set = ()
 
 heightmap: image = None
 
@@ -36,7 +36,19 @@ coin_score: int = 0
 debug: bool = True
 
 # button
-start_button: Actor = Actor(image=game_constants.start_button_image, center=game_constants.start_button_position)
-quit_button: Actor = Actor(image=game_constants.quit_button_image, center=game_constants.quit_button_position)
-back_button: Actor = Actor(image=game_constants.back_button_image, center=game_constants.back_button_position)
-play_button: Actor = Actor(image=game_constants.play_button_image)
+start_button: Actor = Actor(
+    image=game_constants.start_button_image,
+    center=(game_constants.center_position_width, game_constants.start_button_pos_y)
+)
+quit_button: Actor = Actor(
+    image=game_constants.quit_button_image,
+    center=(game_constants.center_position_width, game_constants.quit_button_pos_y)
+)
+back_button: Actor = Actor(
+    image=game_constants.back_button_image,
+    center=(game_constants.center_position_width, game_constants.back_button_pos_y)
+)
+play_button: Actor = Actor(
+    image=game_constants.play_button_image,
+    center=(game_constants.center_position_width, game_constants.play_button_pos_y)
+)
