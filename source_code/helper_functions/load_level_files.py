@@ -7,7 +7,7 @@ from pygame import image
 def load_level_files():
     match state.current_level:
 
-        case LevelState.LEVEL_ONE:
+        case LevelState.LEVEL_ONE:  # todo: modularisieren
             state.current_map = game_constants.level_one
             state.current_heightmap = game_constants.level_one_heightmap
             state.current_map_position = game_constants.level_one_map_position
