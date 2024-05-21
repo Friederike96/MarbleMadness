@@ -1,4 +1,3 @@
-# Marble Madness
 import pgzrun
 from pgzero.game import screen
 from pgzero.screen import Screen
@@ -9,9 +8,6 @@ import math
 
 HEIGHT = 570
 WIDTH = 600
-
-#joystick = pygame.joystick.Joystick(0)
-#joystick.init()
 
 game_state = 0
 curr_level = 0
@@ -77,7 +73,6 @@ def draw():
             print("level 3")
         elif game_state == 6:
             screen.fill((0, 0, 0))
-            # überprüfen ob timer auf 0 wenn ja dann game over nicht anzeigen sondern timer over oder so?
             screen.draw.text("GAME OVER!", center=(300, 300), color='white')
             screen.draw.text("Do you want to play again?", center=(300, 400), color='white')
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
@@ -93,17 +88,18 @@ def draw():
                              fontsize=80)
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
 
-
 def update():
     global timer, game_state, score, coinscore, enemy, target_index
 
-    if game_state == 0:
-        music.play('level1music.mp3')
+    # Handle music based on game state
+    if game_state == 3:
+        if not music.is_playing('level1music'):
+            music.play('level1music')
         music.set_volume(0.1)
-    elif game_state != 0:
+    else:
         music.stop()
 
-        # Get the current target position
+    # Get the current target position
     target_x, target_y = target_positions[target_index]
 
     # Calculate the distance between the enemy and the target position
@@ -117,7 +113,7 @@ def update():
 
     # Move the enemy towards the target position
     if abs(distance_x) > enemyspeed:
-        enemy.x += enemyspeed if distance_x > 0 else - enemyspeed
+        enemy.x += enemyspeed if distance_x > 0 else -enemyspeed
     else:
         enemy.x = target_x
 
@@ -136,11 +132,10 @@ def update():
         sounds.enemysound.set_volume(0.1)
         sounds.enemysound.play()
 
-    if game_state == 3 :
+    if game_state == 3:
         timer -= 1 / 60
-    else :
+    else:
         timer = timerlevel1
-
 
     if timer <= 0:
         game_state = 6
@@ -181,32 +176,28 @@ def update():
         coinscore += 1
         sounds.sfx_coin_single1.play()
 
-
-    if game_state == 3 :#or joystick.get_axis(0) < -0.1 :
+    if game_state == 3:  # or joystick.get_axis(0) < -0.1:
         if keyboard.left:
             marble.dir = max(marble.dir - 0.1, -1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.right :#or joystick.get_axis(0) > 0.1:
+        if keyboard.right:  # or joystick.get_axis(0) > 0.1:
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.up :#or joystick.get_axis(1) < 0.1:
+        if keyboard.up:  # or joystick.get_axis(1) < 0.1:
             marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down :#or joystick.get_axis(1) < -0.1:
+        if keyboard.down:  # or joystick.get_axis(1) < -0.1:
             marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
         marble.speed = max(0, marble.speed - 0.01)
-    # damit man vom Startbildschirm ins Menü kommt
+    # Damit man vom Startbildschirm ins Menü kommt
     elif game_state == 0 and keyboard.RETURN:
         game_state = 1
     elif game_state == 11 and keyboard.RETURN:
         game_state = 1
         marble.pos = 300, 45
         marbleh.pos = 300, 60
-
-    # print("gameState", game_state)
-    # print(keyboard)
 
 def move_marble():
     global game_state
@@ -232,33 +223,29 @@ def move_marble():
     elif marble.angle < -50:
         marble.angle = 0
 
-    # Abfrage ob man im Ziel ist
+    # Abfrage, ob man im Ziel ist
     if marbleh.y > 610:
         game_state = 11
 
-# def on_key_down(key):
-    # print(key)
-
 def on_mouse_down(pos, button):
     global game_state
-    # print(button)
-    # wenn man im Menü auf Enter drückt landet man im Startbildschirm
+    # Wenn man im Menü auf Enter drückt, landet man im Startbildschirm
     if game_state == 1 and btn_quit.collidepoint(pos) and mouse.LEFT:
         game_state = 0
-    # wenn man im Menü auf Start drückt landet man im ersten Level
+    # Wenn man im Menü auf Start drückt, landet man im ersten Level
     elif game_state == 1 and btn_start.collidepoint(pos) and mouse.LEFT:
         game_state = 3
-    # wenn man im GameOver Bildschirm ist
+    # Wenn man im GameOver Bildschirm ist
     elif game_state == 6:
-        # marble und marbleh in die Anfangsposition und Speed auf 0 setzen
+        # Marble und marbleh in die Anfangsposition und Speed auf 0 setzen
         marble.pos = 300, 45
         marbleh.pos = 300, 60
         marble.speed = 0
         marbleh.speed = 0
-        # wenn man im GameOver Bildschirm auf den Play Button drückt landet man im ersten Level
+        # Wenn man im GameOver Bildschirm auf den Play Button drückt, landet man im ersten Level
         if btn_play.collidepoint(pos):
             game_state = 3
-        # wenn man im GameOver Bildschirm auf Quit drückt landet man im Startbildschirm
+        # Wenn man im GameOver Bildschirm auf Quit drückt, landet man im Startbildschirm
         elif btn_quit.collidepoint(pos):
             game_state = 0
 
