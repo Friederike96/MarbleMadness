@@ -101,7 +101,6 @@ def update():
 
     # Get the current target position
     target_x, target_y = target_positions[target_index]
-
     # Calculate the distance between the enemy and the target position
     distance_x = target_x - enemy.x
     distance_y = target_y - enemy.y
