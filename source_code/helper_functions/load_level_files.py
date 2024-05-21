@@ -6,13 +6,13 @@ from pygame import image
 
 def load_level_files():
     match state.current_level:
-
-        case LevelState.LEVEL_ONE:  # todo: modularisieren
+        case LevelState.LEVEL_ONE:
             state.current_map = game_constants.level_one
             state.current_heightmap = game_constants.level_one_heightmap
             state.current_map_position = game_constants.level_one_map_position
 
             state.marble.dir = state.marble.speed = 0
+
             state.marble_start_pos_x = game_constants.marble_position_level_one[0]
             state.marble_start_pos_y = game_constants.marble_position_level_one[0]
 
@@ -24,11 +24,10 @@ def load_level_files():
 
             state.timer = game_constants.timer_level_one
 
-            state.overlay_position = game_constants.overlay_position_level_one
-
         case LevelState.LEVEL_TWO:
             state.current_map = game_constants.level_two
             state.current_heightmap = game_constants.level_two_heightmap
+            state.current_map_position = game_constants.level_two_map_position
 
             state.marble.dir = state.marble.speed = 0
             state.marble.x = game_constants.marble_position_level_two[0]
@@ -39,8 +38,6 @@ def load_level_files():
 
             state.timer = game_constants.timer_level_two
 
-            state.overlay_position = game_constants.overlay_position_level_two
-
         case LevelState.LEVEL_THREE:
             # TODO
             pass
@@ -49,4 +46,4 @@ def load_level_files():
             # TODO
             pass
 
-    state.heightmap = image.load(state.current_map)
+    state.heightmap = image.load(state.current_heightmap)

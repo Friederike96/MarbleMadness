@@ -4,9 +4,6 @@ import os
 HEIGHT = 760
 WIDTH = 900
 
-#HEIGHT = 600
-#WIDTH = 570
-
 base_path = os.getcwd()
 
 marble_image = os.path.join(base_path, 'images\\objects\\marble.png')
