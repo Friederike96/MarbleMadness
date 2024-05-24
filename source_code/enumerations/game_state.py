@@ -7,6 +7,7 @@ class GameState(Enum):
     MENU_PAGE = 'menu_page'
 
     # level states
+    COUNTDOWN = 'countdown'
     LEVEL_GAME = 'level_game'
 
     # states for win or lose

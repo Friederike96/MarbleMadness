@@ -1,9 +1,11 @@
+from time import sleep
+
 from pgzero.builtins import mouse
 
 from source_code.constants import state
 from source_code.enumerations.game_state import GameState
 from source_code.enumerations.level_state import LevelState
-from source_code.functions.helper_functions.load_level_files import load_level_files
+from source_code.functions.backend.load_level_files import load_level_files
 
 
 def on_mouse_down(pos, button):
@@ -15,10 +17,14 @@ def on_mouse_down(pos, button):
 
     # wenn man im Menü auf Start drückt landet man im ersten Level
     elif state.game_state == GameState.MENU_PAGE and state.start_button.collidepoint(pos) and mouse.LEFT:
-        state.game_state = GameState.LEVEL_GAME
+        state.game_state = GameState.COUNTDOWN
+        state.countdown_timer = state.timer
+        state.printed_timer = False
 
     elif state.game_state == GameState.LEVEL_WIN and state.play_button.collidepoint(pos) and mouse.LEFT:
-        state.game_state = GameState.LEVEL_GAME
+        state.game_state = GameState.COUNTDOWN
+        state.countdown_timer = state.timer
+        state.printed_timer = False
         load_level_files()
 
     # wenn man im GameOver Bildschirm ist

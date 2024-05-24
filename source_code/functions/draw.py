@@ -1,7 +1,11 @@
+import os
+from time import sleep
+
 import source_code.constants.game_constants as game_constants
 from source_code.constants import state
 from source_code.enumerations.game_state import GameState
-from source_code.functions.helper_functions.load_level_files import load_level_files
+from source_code.functions.backend.load_level_files import load_level_files
+from source_code.functions.frontend.get_font import get_monospaced_font
 
 
 def draw():
@@ -20,8 +24,10 @@ def draw():
                 state.screen.fill((0, 0, 0))
                 state.screen.draw.text(
                     "Press ENTER button!",
-                    center=(game_constants.center_position_width, game_constants.enter_button_pos_y),
-                    color='white'
+                    center=(game_constants.center_position_width, game_constants.center_position_height),
+                    color='white',
+                    fontname=get_monospaced_font(),
+                    fontsize=40
                 )
 
             case GameState.MENU_PAGE:
@@ -34,6 +40,26 @@ def draw():
 
             case GameState.PLACEHOLDER:
                 print("menu maybe?")
+
+            case GameState.COUNTDOWN:
+                state.screen.blit(state.current_map, state.current_map_position)
+                state.screen.draw.text(
+                    "TIME TO FINISH RACE:",
+                    center=(game_constants.center_position_width, game_constants.center_position_height-25),
+                    color='orange',
+                    fontname=get_monospaced_font(),
+                    fontsize=40,
+                    background='black'
+                )
+                state.screen.draw.text(
+                    f'{state.countdown_timer}',
+                    center=(game_constants.center_position_width, game_constants.center_position_height+25),
+                    color='blue',
+                    fontname=get_monospaced_font(),
+                    fontsize=60,
+                    background='black'
+                )
+                state.printed_timer = True
 
             case GameState.LEVEL_GAME:
                 state.screen.blit(state.current_map, state.current_map_position)

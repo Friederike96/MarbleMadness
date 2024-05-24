@@ -47,6 +47,10 @@ coin_score: int = 0
 display_timer_score: int = 0
 display_coin_score: int = 0
 
+printed_timer: bool = False
+countdown_timer: int = 0
+load_start_position: bool = True
+
 # debug mode
 debug: bool = False
 

@@ -1,11 +1,12 @@
 import random
+from time import sleep
 
 from pgzero.builtins import keyboard
 
 from source_code.constants import state
 from source_code.enumerations.game_state import GameState
 from source_code.enumerations.level_state import LevelState
-from source_code.functions.helper_functions.increment_level import increment_level
+from source_code.functions.backend.increment_level import increment_level
 from source_code.functions.move_marble import move_marble
 
 
@@ -58,6 +59,13 @@ def update():
         add_timing_points()
         increment_level()
         state.not_added_points_and_incremented = False
+
+    elif state.game_state == GameState.COUNTDOWN:
+        if state.countdown_timer == 0:
+            state.game_state = GameState.LEVEL_GAME
+        elif state.printed_timer:
+            state.countdown_timer -= 5  # todo: should be in update
+            sleep(0.5)
 
 
 def add_timing_points():
