@@ -1,4 +1,5 @@
 from pgzero.actor import Actor
+from pgzero.screen import Screen
 from pygame import image
 import os
 
@@ -8,6 +9,8 @@ from source_code.enumerations.game_state import GameState
 
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
+
+screen: Screen = None
 
 # level images
 current_map: str = ''
