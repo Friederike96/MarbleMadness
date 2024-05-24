@@ -1,3 +1,4 @@
+import pygame
 from pgzero.actor import Actor
 from pgzero.screen import Screen
 from pygame import image
@@ -37,6 +38,9 @@ coin: Actor = Actor(image=game_constants.coin_image, center=game_constants.coin_
 start_marble: Actor = Actor(image=game_constants.coin_image, center=(450, 45))
 
 # timer and scores
+clock=pygame.time.Clock()
+previous_clock_time: int = 0
+
 start_timer = False
 not_added_points_and_incremented = True
 

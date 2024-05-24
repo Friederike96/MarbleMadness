@@ -1,8 +1,5 @@
 import os
 
-import pygame.font
-from pygame.font import Font
-
 from source_code.constants import gui_constants, game_constants
 
 

@@ -16,9 +16,19 @@ def update():
 
     if state.game_state == GameState.LEVEL_GAME and state.start_timer:
         state.timer -= 1 / 60
+
+        if state.previous_clock_time == 0:
+            state.previous_clock_time = round(state.timer, 2)
+
+        if round(state.timer, 2) < state.previous_clock_time - 0.2 and state.previous_clock_time != 0:
+            print(f'{state.previous_clock_time} and {state.clock.get_time()}')
+            state.score += 10
+            state.previous_clock_time = round(state.timer, 2)
+
+        print(f'{round(state.timer, 2)} and {state.previous_clock_time}')
+
         if state.timer <= 0:
             state.game_state = GameState.GAME_OVER
-
         else:
             if state.marble.colliderect(state.coin) and state.score != 2:
                 state.coin.x = random.randint(150, 450)
@@ -56,7 +66,7 @@ def update():
         state.marbleh.pos = 300, 60
 
     elif state.game_state == GameState.LEVEL_WIN and state.not_added_points_and_incremented:
-        add_timing_points()
+        add_points_for_remaining_time()
         increment_level()
         state.not_added_points_and_incremented = False
 
@@ -65,11 +75,11 @@ def update():
             state.game_state = GameState.LEVEL_GAME
         elif state.printed_timer:
             state.countdown_timer -= 5  # todo: should be in update
-            sleep(0.5)
+            sleep(0.2)
 
 
-def add_timing_points():
-    timer_score = int(state.timer/3)
+def add_points_for_remaining_time():
+    timer_score = state.timer * 100
     state.score += timer_score
     state.display_timer_score = timer_score
 
