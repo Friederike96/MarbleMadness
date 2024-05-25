@@ -69,16 +69,12 @@ def update():
             increment_level()
             state.not_added_points_and_incremented = False
 
-        if state.wait_counter == 0:
-            increment_level()
-            load_level_files()
-            state.game_state = GameState.COUNTDOWN
-        else:
+        if state.wait_counter != 0:
             state.wait_counter -= 1
             sleep(0.5)
 
     elif state.game_state == GameState.COUNTDOWN:
-        if state.countdown_timer == 0:
+        if int(state.countdown_timer) == 0:
             state.game_state = GameState.LEVEL_GAME
             state.wait_counter = 10
             sleep(0.3)

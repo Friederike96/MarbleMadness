@@ -23,7 +23,7 @@ def load_level_files():
             state.start_timer = False
 
             state.timer = game_constants.timer_level_one
-            state.countdown_timer = state.timer
+            state.countdown_timer = int(state.timer)
 
         case LevelState.LEVEL_TWO:
             state.current_map = game_constants.level_two

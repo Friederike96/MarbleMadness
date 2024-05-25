@@ -55,14 +55,14 @@ def draw():
                     background='black'
                 )
                 state.screen.draw.text(
-                    f'{state.countdown_timer}',
+                    f'{int(state.countdown_timer)}',
                     center=(game_constants.center_position_width, game_constants.center_position_height+30),
                     color='blue',
                     fontname=get_monospaced_font(),
                     fontsize=60,
                     background='black'
                 )
-                timer_to_print = (round(state.timer, 2)-state.countdown_timer)
+                timer_to_print = (int(state.timer)-int(state.countdown_timer))
                 if timer_to_print < 10:
                     timer_to_print = f'0{timer_to_print}'
 
@@ -87,7 +87,7 @@ def draw():
                     background='grey'
                 )
                 state.screen.draw.text(
-                    str(state.score) + '',
+                    str(int(state.score)) + '',
                     (10, 30),
                     color=(0, 0, 139),
                     fontname=get_monospaced_font(),
@@ -159,66 +159,62 @@ def draw():
 
             case GameState.LEVEL_WIN:
 
-                if state.wait_counter == 0:
-                    load_level_files()
-
+                if state.wait_counter == 0 or state.colorful:
+                    text_color = (0, 0, 139)
                 else:
-                    if state.colorful:
-                        text_color = (0, 0, 139)
-                    else:
-                        text_color = (255,  130, 71)
+                    text_color = (255,  130, 71)
 
-                    state.colorful = not state.colorful
+                state.colorful = not state.colorful
 
-                    state.screen.draw.text(
-                        str(int(state.timer)),
-                        (game_constants.center_position_width - 10, 10),
-                        color=(0, 0, 139),
-                        fontname=get_monospaced_font(),
-                        fontsize=20,
-                        background='grey',
-                        align='center'
-                    )
-                    state.screen.draw.text(
-                        'Score',
-                        (10, 10),
-                        color=(0, 0, 139),
-                        fontname=get_monospaced_font(),
-                        fontsize=15,
-                        background='grey'
-                    )
-                    state.screen.draw.text(
-                        str(state.score) + '',
-                        (10, 30),
-                        color=text_color,
-                        fontname=get_monospaced_font(),
-                        fontsize=15,
-                        background='grey'
-                    )
-                    state.screen.draw.text(
-                        f'Bonus for time left:  {state.display_timer_score}',
-                        (10, 50),
-                        color=text_color,
-                        fontname=get_monospaced_font(),
-                        fontsize=15,
-                        background='grey'
-                    )
-                    state.screen.draw.text(
-                        f'Bonus for coins:  {state.display_coin_score}',
-                        (10, 70),
-                        color=text_color,
-                        fontname=get_monospaced_font(),
-                        fontsize=15,
-                        background='grey'
-                    )
-                    state.screen.draw.text(
-                        "Press BUTTON for next level!",
-                        center=(game_constants.center_position_width, 350),  # todo
-                        color='white'
-                    )
-
-                    state.play_button.pos = game_constants.center_position_width, game_constants.play_button_pos_y
-                    state.play_button.draw()
+                state.screen.draw.text(
+                    str(int(state.timer)),
+                    (game_constants.center_position_width - 10, 10),
+                    color=(0, 0, 139),
+                    fontname=get_monospaced_font(),
+                    fontsize=20,
+                    background='grey',
+                    align='center'
+                )
+                state.screen.draw.text(
+                    'Score',
+                    (10, 10),
+                    color=(0, 0, 139),
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='grey'
+                )
+                state.screen.draw.text(
+                    str(state.score) + '',
+                    (10, 30),
+                    color=text_color,
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='grey'
+                )
+                state.screen.draw.text(
+                    f'Bonus for time left:  {state.display_timer_score}',
+                    (10, 50),
+                    color=text_color,
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='grey'
+                )
+                state.screen.draw.text(
+                    f'Bonus for coins:  {state.display_coin_score}',
+                    (10, 70),
+                    color=text_color,
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='grey'
+                )
+                state.screen.draw.text(
+                    f'Next Level',
+                    (game_constants.center_position_width-50, game_constants.center_position_height-10),
+                    color='white',
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='black'
+                )
 
             case GameState.GAME_WIN:
                 state.screen.fill((0, 0, 0))
