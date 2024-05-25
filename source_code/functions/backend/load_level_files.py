@@ -23,6 +23,7 @@ def load_level_files():
             state.start_timer = False
 
             state.timer = game_constants.timer_level_one
+            state.countdown_timer = state.timer
 
         case LevelState.LEVEL_TWO:
             state.current_map = game_constants.level_two
@@ -37,6 +38,7 @@ def load_level_files():
             state.marbleh.y = game_constants.marbleh_position_level_two[1]
 
             state.timer = game_constants.timer_level_two
+            state.countdown_timer = state.timer
 
         case LevelState.LEVEL_THREE:
             # TODO

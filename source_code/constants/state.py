@@ -13,6 +13,8 @@ current_level: LevelState = LevelState.LEVEL_ONE
 
 screen: Screen = None
 
+start_game: bool = True
+
 # level images
 current_map: str = ''
 current_heightmap: str = ''
@@ -40,6 +42,9 @@ start_marble: Actor = Actor(image=game_constants.coin_image, center=(450, 45))
 # timer and scores
 clock=pygame.time.Clock()
 previous_clock_time: int = 0
+
+colorful: bool = False
+wait_counter: int = 10
 
 start_timer = False
 not_added_points_and_incremented = True

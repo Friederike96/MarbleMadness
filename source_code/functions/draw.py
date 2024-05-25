@@ -11,8 +11,9 @@ from source_code.functions.frontend.get_font import get_monospaced_font
 
 
 def draw():
-    if not state.game_state == GameState.LEVEL_GAME:
+    if state.start_game:
         load_level_files()
+        state.start_game = False
 
     if state.debug:
         state.screen.blit(state.current_heightmap, state.current_map_position)
@@ -29,7 +30,7 @@ def draw():
                     center=(game_constants.center_position_width, game_constants.center_position_height),
                     color='white',
                     fontname=get_monospaced_font(),
-                    fontsize=40
+                    fontsize=30
                 )
 
             case GameState.MENU_PAGE:
@@ -158,16 +159,21 @@ def draw():
 
             case GameState.LEVEL_WIN:
 
-                for i in range(0,6):
-                    if i in[1,3,5]:
-                        text_color = 'white'
-                    else:
+                if state.wait_counter == 0:
+                    load_level_files()
+
+                else:
+                    if state.colorful:
                         text_color = (0, 0, 139)
+                    else:
+                        text_color = (255,  130, 71)
+
+                    state.colorful = not state.colorful
 
                     state.screen.draw.text(
                         str(int(state.timer)),
                         (game_constants.center_position_width - 10, 10),
-                        color=text_color,
+                        color=(0, 0, 139),
                         fontname=get_monospaced_font(),
                         fontsize=20,
                         background='grey',
@@ -176,7 +182,7 @@ def draw():
                     state.screen.draw.text(
                         'Score',
                         (10, 10),
-                        color=text_color,
+                        color=(0, 0, 139),
                         fontname=get_monospaced_font(),
                         fontsize=15,
                         background='grey'
@@ -186,7 +192,7 @@ def draw():
                         (10, 30),
                         color=text_color,
                         fontname=get_monospaced_font(),
-                        fontsize=20,
+                        fontsize=15,
                         background='grey'
                     )
                     state.screen.draw.text(
@@ -194,7 +200,7 @@ def draw():
                         (10, 50),
                         color=text_color,
                         fontname=get_monospaced_font(),
-                        fontsize=20,
+                        fontsize=15,
                         background='grey'
                     )
                     state.screen.draw.text(
@@ -202,7 +208,7 @@ def draw():
                         (10, 70),
                         color=text_color,
                         fontname=get_monospaced_font(),
-                        fontsize=20,
+                        fontsize=15,
                         background='grey'
                     )
                     state.screen.draw.text(
@@ -213,9 +219,6 @@ def draw():
 
                     state.play_button.pos = game_constants.center_position_width, game_constants.play_button_pos_y
                     state.play_button.draw()
-                    sleep(0.5)
-
-                load_level_files()
 
             case GameState.GAME_WIN:
                 state.screen.fill((0, 0, 0))
