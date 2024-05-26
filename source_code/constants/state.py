@@ -15,6 +15,10 @@ screen: Screen = None
 
 start_game: bool = True
 
+# new buttons
+play_game_color: str = 'orange'
+quit_color: str = 'white'
+
 # level images
 current_map: str = ''
 current_heightmap: str = ''

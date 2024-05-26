@@ -5,9 +5,11 @@ from pgzero.screen import Screen
 from pygame import Surface
 
 from source_code.constants import state
+from source_code.functions import on_mouse_move
 from source_code.functions.draw import draw
 from source_code.functions.move_marble import move_marble
 from source_code.functions.on_mouse_down import on_mouse_down
+from source_code.functions.on_mouse_move import on_mouse_move
 from source_code.functions.update import update
 
 # do not delete, needed here
@@ -25,4 +27,5 @@ while True:
     draw()
     update()
     move_marble()
+    on_mouse_move()
     on_mouse_down()

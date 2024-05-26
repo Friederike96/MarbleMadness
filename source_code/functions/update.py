@@ -57,6 +57,20 @@ def update():
     elif state.game_state == GameState.START_PAGE and keyboard.RETURN:
         state.game_state = GameState.MENU_PAGE
 
+    elif state.game_state == GameState.MENU_PAGE:
+        if state.play_game_color == 'orange':
+            if keyboard.down:
+                state.quit_color = 'orange'
+                state.play_game_color = 'white'
+            if keyboard.enter:
+                state.game_state = GameState.COUNTDOWN
+                state.countdown_timer = state.timer
+                state.printed_timer = False
+
+        elif state.quit_color == 'orange' and keyboard.up:
+            state.play_game_color = 'orange'
+            state.quit_color = 'white'
+
     elif state.game_state == GameState.GAME_WIN and keyboard.RETURN:
         state.game_state = GameState.MENU_PAGE
         state.current_level = LevelState.LEVEL_ONE

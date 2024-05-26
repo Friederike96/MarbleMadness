@@ -2,6 +2,7 @@ import os
 from time import sleep
 
 import pygame
+from pygame import joystick
 
 import source_code.constants.game_constants as game_constants
 from source_code.constants import state, gui_constants
@@ -35,11 +36,42 @@ def draw():
 
             case GameState.MENU_PAGE:
                 state.screen.fill((0, 0, 0))
-                state.start_button.pos = game_constants.center_position_width, game_constants.start_button_pos_y
-                state.start_button.draw()
-                state.quit_button.pos = game_constants.center_position_width, game_constants.quit_button_pos_y
-                state.quit_button.draw()
-                load_level_files()
+
+                arrow_pos = (game_constants.center_position_width - 120, game_constants.center_position_height)
+                if state.quit_color == 'orange':
+                    arrow_pos = (game_constants.center_position_width - 120, game_constants.center_position_height + 50)
+
+                state.screen.draw.text(
+                    'Play Game',
+                    (game_constants.center_position_width - 100, game_constants.center_position_height),
+                    color=state.play_game_color,
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='black'
+                )
+                state.screen.draw.text(
+                    'Quit Game',
+                    (game_constants.center_position_width - 100, game_constants.center_position_height + 50),
+                    color=state.quit_color,
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='black'
+                )
+                state.screen.draw.text(
+                    '>',
+                    arrow_pos,
+                    color='orange',
+                    fontname=get_monospaced_font(),
+                    fontsize=15,
+                    background='black'
+                )
+
+
+                #state.start_button.pos = game_constants.center_position_width, game_constants.start_button_pos_y
+                #state.start_button.draw()
+                #state.quit_button.pos = game_constants.center_position_width, game_constants.quit_button_pos_y
+                #state.quit_button.draw()
+                load_level_files() # todo: should be in update
 
             case GameState.PLACEHOLDER:
                 print("menu maybe?")
