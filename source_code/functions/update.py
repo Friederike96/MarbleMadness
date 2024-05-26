@@ -62,7 +62,7 @@ def update():
             if keyboard.down:
                 state.quit_color = 'orange'
                 state.play_game_color = 'white'
-            if keyboard.enter:
+            if keyboard.left:
                 state.game_state = GameState.COUNTDOWN
                 state.countdown_timer = state.timer
                 state.printed_timer = False
