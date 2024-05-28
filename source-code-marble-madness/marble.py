@@ -25,9 +25,16 @@ debug = False
 timer = 30
 score = 0
 coinscore = 0
-coin = Actor('coingold')
+
+
+
+coin_images = ['coinpos1', 'coinpos2', 'coinpos3', 'coinpos4']
+coin = Actor(coin_images[0])
 coin.x = (150)
 coin.y = (45)
+coin_frame = 0
+coin_animation_counter = 0
+coin_animation_interval = 10
 
 enemy = Actor('shurikensml')
 enemy.x = (130)
@@ -92,7 +99,7 @@ def draw():
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
 
 def update():
-    global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle
+    global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle, coin_frame, coin_animation_counter
 
     # Handle music based on game state
     if game_state == 3:
@@ -200,6 +207,13 @@ def update():
         game_state = 1
         marble.pos = 300, 45
         marbleh.pos = 300, 60
+
+    # Update coin animation
+    coin_animation_counter += 1
+    if coin_animation_counter >= coin_animation_interval:
+        coin_frame = (coin_frame + 1) % len(coin_images)
+        coin.image = coin_images[coin_frame]
+        coin_animation_counter = 0
 
 def move_marble():
     global game_state
