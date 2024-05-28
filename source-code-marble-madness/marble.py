@@ -1,10 +1,15 @@
 import pgzrun
 from pgzero.game import screen
 from pgzero.screen import Screen
+import pygame
 from pygame import image, Surface
 from pgzero.builtins import keyboard, Actor, mouse
 import random
 import math
+
+#joystick = pygame.joystick.Joystick(0)
+#joystick.init()
+
 
 HEIGHT = 570
 WIDTH = 600
@@ -35,6 +40,10 @@ coin.y = (45)
 coin_frame = 0
 coin_animation_counter = 0
 coin_animation_interval = 10
+
+flag = Actor('blueflag')
+flag.x = 248
+flag.y = 500
 
 enemy = Actor('shurikensml')
 enemy.x = (130)
@@ -73,6 +82,7 @@ def draw():
             screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
             marble.draw()
             enemy.draw()
+            flag.draw()
             if coinscore != 6:
                 coin.draw()
             marble.draw()
@@ -141,6 +151,11 @@ def update():
         sounds.enemysound.set_volume(0.1)
         sounds.enemysound.play()
 
+    if check_collision_with_flag(marble, flag):
+        game_state = 11
+        sounds.enemysound.set_volume(0.1)
+
+
     if game_state == 3:
         timer -= 1 / 60
     else:
@@ -185,17 +200,17 @@ def update():
         coinscore += 1
         sounds.sfx_coin_single1.play()
 
-    if game_state == 3:  # or joystick.get_axis(0) < -0.1:
-        if keyboard.left:
+    if game_state == 3:
+        if keyboard.left: #or joystick.get_axis(0) < -0.1:
             marble.dir = max(marble.dir - 0.1, -1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.right:  # or joystick.get_axis(0) > 0.1:
+        if keyboard.right: #or joystick.get_axis(0) > 0.1:
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.up:  # or joystick.get_axis(1) < 0.1:
+        if keyboard.up: #or joystick.get_axis(1) < 0.1:
             marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down:  # or joystick.get_axis(1) < -0.1:
+        if keyboard.down: #or joystick.get_axis(1) < -0.1:
             marbleh.y += 1.5
             marble.speed = min(1, marble.speed + 0.1)
         move_marble()
@@ -239,9 +254,6 @@ def move_marble():
     elif marble.angle < -50:
         marble.angle = 0
 
-    # Abfrage, ob man im Ziel ist
-    if marbleh.y > 610:
-        game_state = 11
 
 def on_mouse_down(pos, button):
     global game_state
@@ -272,6 +284,11 @@ def check_collision_with_shuriken(marble, shuriken):
     # Define a smaller rectangle for the shuriken
     shuriken_hitbox = Rect(shuriken.x - shuriken.width / 4, shuriken.y - shuriken.height / 4, shuriken.width / 2, shuriken.height / 2)
     return marble.colliderect(shuriken_hitbox)
+
+def check_collision_with_flag(marble, flag):
+    # Define a smaller rectangle for the shuriken
+    flag_hitbox = Rect(flag.x - flag.width / 50, flag.y - flag.height / 50, flag.width / 50, flag.height / 50)
+    return marble.colliderect(flag_hitbox)
 
 surf = Surface(size=[WIDTH, HEIGHT])
 pgzrun.mod.screen = Screen(surface=surf)
