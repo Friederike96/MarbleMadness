@@ -74,19 +74,19 @@ def update():
                 state.coin.y = random.randint(45, 500)
                 state.coin_score += 250
 
-            if keyboard.left:
+            if keyboard.left or state.joystick is not None and state.joystick.get_axis(0) < -0.1:
                 state.marble.dir = max(state.marble.dir - 1, -1)
                 state.marble.speed = min(1, state.marble.speed + 0.1)
 
-            if keyboard.right:
+            if keyboard.right or state.joystick is not None and state.joystick.get_axis(0) > 0.1:
                 state.marble.dir = min(state.marble.dir + 1, 1)
                 state.marble.speed = min(1, state.marble.speed + 0.1)
 
-            if keyboard.up:
+            if keyboard.up or state.joystick is not None and state.joystick.get_axis(1) < 0.1:
                 state.marbleh.y -= 2
                 state.marble.speed = min(1, state.marble.speed + 0.1)
 
-            if keyboard.down:
+            if keyboard.down or state.joystick is not None and state.joystick.get_axis(1) < -0.1:
                 state.marbleh.y += 1.5
                 state.marble.speed = min(1, state.marble.speed + 0.1)
 

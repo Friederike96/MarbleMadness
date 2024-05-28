@@ -4,6 +4,8 @@ from pgzero.screen import Screen
 from pygame import image
 import os
 
+from pygame.joystick import Joystick
+
 import source_code.constants.game_constants as game_constants
 from source_code.enumerations.level_state import LevelState
 from source_code.enumerations.game_state import GameState
@@ -14,6 +16,9 @@ current_level: LevelState = LevelState.LEVEL_ONE
 screen: Screen = None
 
 start_game: bool = True
+
+# Joystick
+joystick: Joystick = None
 
 # new buttons
 play_game_color: str = 'orange'
