@@ -27,5 +27,5 @@ while True:
     draw()
     update()
     move_marble()
-    on_mouse_move()
-    on_mouse_down()
+    on_mouse_move()  # should be in update
+    on_mouse_down()  # should be in update

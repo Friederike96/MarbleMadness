@@ -14,10 +14,10 @@ def load_level_files():
             state.marble.dir = state.marble.speed = 0
 
             state.marble_start_pos_x = game_constants.marble_position_level_one[0]
-            state.marble_start_pos_y = game_constants.marble_position_level_one[0]
+            state.marble_start_pos_y = game_constants.marble_position_level_one[1]
 
             state.marbleh_start_pos_x = game_constants.marbleh_position_level_one[0]
-            state.marbleh_start_pos_y = game_constants.marbleh_position_level_one[0]
+            state.marbleh_start_pos_y = game_constants.marbleh_position_level_one[1]
 
             state.load_start_position = True
             state.start_timer = False

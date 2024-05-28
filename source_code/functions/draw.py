@@ -1,14 +1,9 @@
-import os
-from time import sleep
-
-import pygame
-from pygame import joystick
-
 import source_code.constants.game_constants as game_constants
-from source_code.constants import state, gui_constants
+from source_code.constants import state
 from source_code.enumerations.game_state import GameState
 from source_code.functions.backend.load_level_files import load_level_files
 from source_code.functions.frontend.get_font import get_monospaced_font
+from source_code.functions.helper_functions.draw_menu_buttons import draw_menu_buttons
 
 
 def draw():
@@ -36,47 +31,16 @@ def draw():
 
             case GameState.MENU_PAGE:
                 state.screen.fill((0, 0, 0))
-
-                arrow_pos = (game_constants.center_position_width - 120, game_constants.center_position_height)
-                if state.quit_color == 'orange':
-                    arrow_pos = (game_constants.center_position_width - 120, game_constants.center_position_height + 50)
-
-                state.screen.draw.text(
-                    'Play Game',
-                    (game_constants.center_position_width - 100, game_constants.center_position_height),
-                    color=state.play_game_color,
-                    fontname=get_monospaced_font(),
-                    fontsize=15,
-                    background='black'
-                )
-                state.screen.draw.text(
-                    'Quit Game',
-                    (game_constants.center_position_width - 100, game_constants.center_position_height + 50),
-                    color=state.quit_color,
-                    fontname=get_monospaced_font(),
-                    fontsize=15,
-                    background='black'
-                )
-                state.screen.draw.text(
-                    '>',
-                    arrow_pos,
-                    color='orange',
-                    fontname=get_monospaced_font(),
-                    fontsize=15,
-                    background='black'
-                )
-
-
-                #state.start_button.pos = game_constants.center_position_width, game_constants.start_button_pos_y
-                #state.start_button.draw()
-                #state.quit_button.pos = game_constants.center_position_width, game_constants.quit_button_pos_y
-                #state.quit_button.draw()
+                draw_menu_buttons(text_one='Play Game', text_two='Quit Game')
                 load_level_files() # todo: should be in update
 
             case GameState.PLACEHOLDER:
                 print("menu maybe?")
 
             case GameState.COUNTDOWN:
+                state.marble.x = state.marble_start_pos_x
+                state.marble.y = state.marble_start_pos_y
+                state.marble.draw()
                 state.screen.blit(state.current_map, state.current_map_position)
                 state.screen.draw.text(
                     "TIME TO FINISH RACE:",
@@ -98,9 +62,6 @@ def draw():
                 if timer_to_print < 10:
                     timer_to_print = f'0{timer_to_print}'
 
-                # font =  pygame.font.Font(gui_constants.marble_madness, 30)
-                # font.get_metrics
-                # size = pygame.font.Font.size(f'{timer_to_print}')
                 state.screen.draw.text(
                     f'{timer_to_print}',
                     (game_constants.center_position_width-10, 10),
@@ -156,23 +117,10 @@ def draw():
                     fontsize=20,
                     background='grey'
                 )
-
-                if state.load_start_position:
-                    state.marble.pos = state.marble_start_pos_y, state.marble_start_pos_y
-                    state.marbleh.pos = state.marbleh_start_pos_x, state.marbleh_start_pos_y
-                    state.load_start_position = False
-
-                    state.start_marble.draw()  # todo: needed?
-                    state.marble.draw()
-
-                if state.start_timer:
-                    state.marble.draw()
+                state.marble.draw()
 
                 if state.coin_score != 2:
                     state.coin.draw()
-
-                if state.start_timer:
-                    state.marble.draw()
                 # screen.blit(game_constants.overlay_image, overlay_position)
 
             case GameState.GAME_OVER:
@@ -194,7 +142,7 @@ def draw():
                 if state.wait_counter == 0 or state.colorful:
                     text_color = (0, 0, 139)
                 else:
-                    text_color = (255,  130, 71)
+                    text_color = 'orange'
 
                 state.colorful = not state.colorful
 
@@ -239,14 +187,9 @@ def draw():
                     fontsize=15,
                     background='grey'
                 )
-                state.screen.draw.text(
-                    f'Next Level',
-                    (game_constants.center_position_width-50, game_constants.center_position_height-10),
-                    color='white',
-                    fontname=get_monospaced_font(),
-                    fontsize=15,
-                    background='black'
-                )
+
+                if state.wait_counter == 0:
+                    draw_menu_buttons(text_one='Next Level', text_two='Quit Game')
 
             case GameState.GAME_WIN:
                 state.screen.fill((0, 0, 0))
