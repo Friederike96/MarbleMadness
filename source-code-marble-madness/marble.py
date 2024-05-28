@@ -29,7 +29,7 @@ coin = Actor('coingold')
 coin.x = (150)
 coin.y = (45)
 
-enemy = Actor('enemy50')
+enemy = Actor('shurikensml')
 enemy.x = (130)
 enemy.y = (170)
 
@@ -38,6 +38,9 @@ target_index = 0
 enemyspeed = 1
 
 timerlevel1 = 60
+
+# Initialize angle for shuriken rotation
+shuriken_angle = 0
 
 def draw():
     global game_state
@@ -89,7 +92,7 @@ def draw():
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
 
 def update():
-    global timer, game_state, score, coinscore, enemy, target_index
+    global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle
 
     # Handle music based on game state
     if game_state == 3:
@@ -105,10 +108,10 @@ def update():
     distance_x = target_x - enemy.x
     distance_y = target_y - enemy.y
 
-    angle = math.degrees(math.atan2(-distance_y, distance_x))
-
-    # Adjust the enemy's angle
-    enemy.angle = angle
+    shuriken_angle += 5
+    if shuriken_angle >= 360:
+        shuriken_angle = 0
+    enemy.angle = shuriken_angle
 
     # Move the enemy towards the target position
     if abs(distance_x) > enemyspeed:
@@ -126,7 +129,7 @@ def update():
         # Move to the next target position
         target_index = (target_index + 1) % len(target_positions)
 
-    if marble.colliderect(enemy):
+    if check_collision_with_shuriken(marble, enemy):
         game_state = 6
         sounds.enemysound.set_volume(0.1)
         sounds.enemysound.play()
@@ -250,6 +253,11 @@ def on_mouse_down(pos, button):
 
 def get_height(x, y):
     return heightmap.get_at((int(x), int(y)))
+
+def check_collision_with_shuriken(marble, shuriken):
+    # Define a smaller rectangle for the shuriken
+    shuriken_hitbox = Rect(shuriken.x - shuriken.width / 4, shuriken.y - shuriken.height / 4, shuriken.width / 2, shuriken.height / 2)
+    return marble.colliderect(shuriken_hitbox)
 
 surf = Surface(size=[WIDTH, HEIGHT])
 pgzrun.mod.screen = Screen(surface=surf)
