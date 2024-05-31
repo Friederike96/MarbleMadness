@@ -1,6 +1,6 @@
 import pygame
 
-from source_code.constants import state
+from constants import state
 
 
 def initialize_joystick():

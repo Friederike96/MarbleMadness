@@ -1,6 +1,6 @@
-import source_code.constants.game_constants as game_constants
-import source_code.constants.state as state
-from source_code.enumerations.level_state import LevelState
+import constants.game_constants as game_constants
+import constants.state as state
+from enumerations.level_state import LevelState
 from pygame import image
 
 

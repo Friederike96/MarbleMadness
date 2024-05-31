@@ -3,12 +3,12 @@ from time import sleep
 
 from pgzero.builtins import keyboard
 
-from source_code.constants import state
-from source_code.enumerations.game_state import GameState
-from source_code.enumerations.level_state import LevelState
-from source_code.functions.backend.increment_level import increment_level
-from source_code.functions.backend.load_level_files import load_level_files
-from source_code.functions.move_marble import move_marble
+from constants import state
+from enumerations.game_state import GameState
+from enumerations.level_state import LevelState
+from functions.backend.increment_level import increment_level
+from functions.backend.load_level_files import load_level_files
+from functions.move_marble import move_marble
 
 
 def update():

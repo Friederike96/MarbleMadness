@@ -1,5 +1,5 @@
-import source_code.constants.state as state
-from source_code.enumerations.level_state import LevelState
+import constants.state as state
+from enumerations.level_state import LevelState
 
 
 def increment_level():

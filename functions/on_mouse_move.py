@@ -1,5 +1,5 @@
-from source_code.constants import game_constants, state
-from source_code.enumerations.game_state import GameState
+from constants import state, game_constants
+from enumerations.game_state import GameState
 
 
 def on_mouse_move(pos, rel, buttons):

@@ -1,6 +1,6 @@
 import os
 
-from source_code.constants import gui_constants, game_constants
+from constants import gui_constants, game_constants
 
 
 def get_monospaced_font() -> str:

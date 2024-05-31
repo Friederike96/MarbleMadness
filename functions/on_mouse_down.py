@@ -1,14 +1,9 @@
-from time import sleep
-
-import pygame
 from pgzero.builtins import mouse
 
-from source_code.constants import state, game_constants
-from source_code.enumerations.game_state import GameState
-from source_code.enumerations.level_state import LevelState
-from source_code.functions.backend.increment_level import increment_level
-from source_code.functions.backend.load_level_files import load_level_files
-from source_code.functions.frontend.get_font import get_monospaced_font
+from constants import state, game_constants
+from enumerations.game_state import GameState
+from enumerations.level_state import LevelState
+from functions.backend.load_level_files import load_level_files
 
 
 def on_mouse_down(pos, button):

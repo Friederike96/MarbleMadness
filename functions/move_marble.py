@@ -1,7 +1,7 @@
-import source_code.constants.game_constants as game_constants
-from source_code.constants import state
-from source_code.enumerations.game_state import GameState
-from source_code.enumerations.level_state import LevelState
+import constants.game_constants as game_constants
+from constants import state
+from enumerations.game_state import GameState
+from enumerations.level_state import LevelState
 
 
 def move_marble():
@@ -21,7 +21,7 @@ def move_marble():
     state.marbleh.y += state.marble.speed
     state.marble.x = state.marbleh.x
     state.marble.y = (state.marbleh.y * 0.6) + ((255 - center_column.r) * 1.25)
-    state.marble.angle = state.marble.angle + state.marble.speed *state.marble.dir * -10
+    state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * -10
 
     if state.marble.angle > 0:
         state.marble.angle = -50

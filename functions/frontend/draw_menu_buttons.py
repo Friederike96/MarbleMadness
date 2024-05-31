@@ -1,5 +1,5 @@
-from source_code.constants import game_constants, state
-from source_code.functions.frontend.get_font import get_monospaced_font
+from constants import state, game_constants
+from functions.frontend.get_font import get_monospaced_font
 
 
 def draw_menu_buttons(text_one: str, text_two: str):

@@ -2,13 +2,11 @@ import pygame
 from pgzero.actor import Actor
 from pgzero.screen import Screen
 from pygame import image
-import os
-
 from pygame.joystick import Joystick
 
-import source_code.constants.game_constants as game_constants
-from source_code.enumerations.level_state import LevelState
-from source_code.enumerations.game_state import GameState
+import constants.game_constants as game_constants
+from enumerations.game_state import GameState
+from enumerations.level_state import LevelState
 
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
