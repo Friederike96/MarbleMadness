@@ -1,5 +1,4 @@
-import constants.game_constants as game_constants
-from constants import state
+from constants import state, game_constants
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
 
