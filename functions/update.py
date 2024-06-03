@@ -12,6 +12,9 @@ from functions.move_marble import move_marble
 
 
 def update():
+    #on_mouse_move()  # todo: not wanted anymore
+    #on_mouse_down()  # todo: not wanted anymore
+
     if not state.start_timer and keyboard.left or keyboard.right or keyboard.up or keyboard.down:
         state.start_timer = True
 

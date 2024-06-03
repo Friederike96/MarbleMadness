@@ -36,8 +36,8 @@ def draw():
             print("menu maybe?")
 
         elif state.game_state == GameState.COUNTDOWN:
-            state.marble.x = state.marble_start_pos_x
-            state.marble.y = state.marble_start_pos_y
+            #state.marble.x = state.marble_start_pos_x
+            #state.marble.y = state.marble_start_pos_y
             state.marble.draw()
             state.screen.blit(state.current_map, state.current_map_position)
             state.screen.draw.text(

@@ -4,6 +4,9 @@ from enumerations.level_state import LevelState
 
 
 def move_marble():
+    if state.game_state != GameState.LEVEL_GAME:
+        return
+
     center_column = get_height(state.marbleh.x, state.marbleh.y)
     left_column = get_height(state.marbleh.x - 10, state.marbleh.y + 10)
     right_column = get_height(state.marbleh.x + 10, state.marbleh.y + 10)

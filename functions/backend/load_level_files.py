@@ -11,6 +11,8 @@ def load_level_files():
         state.current_map_position = game_constants.level_one_map_position
 
         state.marble.dir = state.marble.speed = 0
+        state.marble.pos = game_constants.marble_position_level_one
+        state.marbleh.pos = game_constants.marbleh_position_level_one
 
         state.marble_start_pos_x = game_constants.marble_position_level_one[0]
         state.marble_start_pos_y = game_constants.marble_position_level_one[1]

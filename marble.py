@@ -1,20 +1,18 @@
 # Marble Madness
 
+import sys
+
 import pgzrun
 from pgzero.screen import Screen
 from pygame import Surface
 
-# state.py
-
 from constants import state
-from functions.draw import draw
 from functions.backend.initialize_joystick import initialize_joystick
-from functions.move_marble import move_marble
-from functions.on_mouse_down import on_mouse_down
-from functions.on_mouse_move import on_mouse_move
+from functions.draw import draw
+from functions.process_input import process_input
 from functions.update import update
 
-import sys
+# state.py
 print(sys.path)
 
 # do not delete, needed here
@@ -29,8 +27,6 @@ state.screen = pgzrun.mod.screen
 pgzrun.go()
 
 while True:
-    draw()
+    process_input()
     update()
-    move_marble()
-    on_mouse_move()  # should be in update
-    on_mouse_down()  # should be in update
+    draw()
