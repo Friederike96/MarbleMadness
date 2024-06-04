@@ -57,7 +57,7 @@ marble_bottom_frames = ['marble_bottom1', 'marble_bottom2', 'marble_bottom3', 'm
 
 # Initialize animation variables
 marble_animation_counter = 0
-marble_animation_interval = 5
+marble_animation_interval = 6
 marble_frame = 0
 current_direction = 'still'
 
