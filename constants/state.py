@@ -9,6 +9,7 @@ from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
 
+# game states
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
 game_over_state: GameOverState = GameOverState.UNKNOWN
@@ -20,19 +21,24 @@ start_game: bool = True
 # Joystick
 joystick: Joystick = None
 
-# new buttons
+# Buttons
+# TODO
+
 play_game_color: str = 'orange'
 quit_color: str = 'white'
 
-# level images
+# current map and heightmap, set in load_level_files
 current_map: str = ''
 current_heightmap: str = ''
 
-current_map_position: set = ()
-
+# heightmap image
 heightmap: image = None
 
-overlay_position: set = game_constants.overlay_position_level_one
+# position of map and heightmap, depends on level
+current_map_position: set = ()
+
+# position of flag
+flag_position: set = game_constants.flag_position_level_one
 
 # marble
 marble: Actor = Actor(image=game_constants.marble_image, center=game_constants.marble_position_level_one)
@@ -40,32 +46,61 @@ marbleh: Actor = Actor(image=game_constants.marble_image, center=game_constants.
 marble.dir = marble.speed = 0
 marble_moved_once: bool = False
 
-# coin
-coin: Actor = Actor(image=game_constants.coin_image, center=game_constants.coin_position_level_one)
+# marble animation
+marble_animation_counter = 0
+marble_animation_interval = 6
+marble_frame = 0
+current_direction = 'still'
 
-# timer and scores
+# coin
+coin: Actor = Actor(image=game_constants.coin_images[0], center=game_constants.coin_position_level_one)
+coin_frame = 0
+coin_animation_counter = 0
+coin_animation_interval = 10
+
+# flag
+flag = Actor('blueflag')
+flag.x = 248  # todo in constants
+flag.y = 500
+
+# enemy
+enemy = Actor('shurikensml')
+enemy.x = 130  # todo in constants
+enemy.y = 170
+enemy_speed = 1
+enemy_angle = 0
+enemy_index = 0
+
+# timer
+timer: int = 0
+start_timer = False
 previous_clock_time: int = 0
 
-colorful: bool = False
-wait_counter_for_score_display: int = 10
-wait_counter_for_game_over: int = 10
-
-start_timer = False
-not_added_points_and_incremented = True
-
-timer: int = 0
-level_timer = 0
+# scores
 score: int = 0
 coin_score: int = 0
+not_added_points_and_incremented = True
 
-score_for_current_level = 0
-deducted_score_for_lost_level: bool = False
+# needed for displaying countdown
+printed_timer: bool = False
+countdown_timer: int = 0
 
+# needed for displaying score when won level
 display_timer_score: int = 0
 display_coin_score: int = 0
 
-printed_timer: bool = False
-countdown_timer: int = 0
+# needed to deduct points when lost level
+score_for_current_level = 0
+deducted_score_for_lost_level: bool = False
+
+# needed for determine which color to use when blinking (level won or game over message)
+colorful: bool = False
+
+# needed for displaying blinking score when won level
+wait_counter_for_score_display: int = 10
+
+# needed for displaying blinking game over message when lost level
+wait_counter_for_game_over: int = 10
 
 # debug mode
 debug: bool = False

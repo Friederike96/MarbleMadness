@@ -9,7 +9,7 @@ from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
 from functions.backend.increment_level import increment_level
 from functions.backend.load_level_files import load_level_files
-from functions.move_marble import move_marble
+from functions.backend.move_marble import move_marble
 
 
 def update():

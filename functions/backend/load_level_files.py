@@ -17,7 +17,6 @@ def load_level_files():
         state.start_timer = False
 
         state.timer = game_constants.timer_level_one
-        state.level_timer = game_constants.timer_level_one
         state.countdown_timer = int(state.timer)
 
         state.previous_clock_time = 0
@@ -36,7 +35,6 @@ def load_level_files():
         state.start_timer = False
 
         state.timer = game_constants.timer_level_two
-        state.level_timer = game_constants.timer_level_two
         state.countdown_timer = state.timer
 
         state.previous_clock_time = 0
