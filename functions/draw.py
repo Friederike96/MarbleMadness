@@ -1,6 +1,8 @@
 from constants import state, game_constants
+from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from functions.backend.load_level_files import load_level_files
+from functions.frontend.draw_game_over_message import draw_game_over_message
 from functions.frontend.draw_menu_buttons import draw_menu_buttons
 from functions.frontend.get_font import get_monospaced_font
 
@@ -82,7 +84,7 @@ def draw():
                 (10, 30),
                 color=(0, 0, 139),
                 fontname=get_monospaced_font(),
-                fontsize=20,
+                fontsize=15,
                 background='grey'
             )
             state.printed_timer = True
@@ -112,7 +114,7 @@ def draw():
                 (10, 30),
                 color=(0, 0, 139),
                 fontname=get_monospaced_font(),
-                fontsize=20,
+                fontsize=15,
                 background='grey'
             )
             state.marble.draw()
@@ -122,28 +124,44 @@ def draw():
             # screen.blit(game_constants.overlay_image, overlay_position)
 
         elif state.game_state == GameState.GAME_OVER:
-            state.screen.fill((0, 0, 0))
-            # überprüfen ob timer auf 0 wenn ja dann game over nicht anzeigen sondern timer over oder so?
-            state.screen.draw.text("GAME OVER!", center=(game_constants.center_position_width, 200), color='white')
-            state.screen.draw.text("Do you want to play again?", center=(game_constants.center_position_width, 300), color='white')
-            state.screen.draw.text('Score: ' + str(state.score), (game_constants.WIDTH - 100, 10), color=(255, 255, 255), fontsize=30)
+            state.screen.draw.text(
+                str(int(state.timer)),
+                (game_constants.center_position_width - 10, 10),
+                color=(0, 0, 139),
+                fontname=get_monospaced_font(),
+                fontsize=20,
+                background='grey',
+                align='center'
+            )
+            state.screen.draw.text(
+                'Score',
+                (10, 10),
+                color=(0, 0, 139),
+                fontname=get_monospaced_font(),
+                fontsize=15,
+                background='grey'
+            )
+            state.screen.draw.text(
+                str(state.score),
+                (10, 30),
+                color=(0, 0, 139),
+                fontname=get_monospaced_font(),
+                fontsize=15,
+                background='grey'
+            )
+            if state.wait_counter_for_game_over != 0:
+                draw_game_over_message()
 
-            state.quit_button.pos = game_constants.center_position_width, 500
-            state.quit_button.draw()
-
-            state.play_button.pos = game_constants.center_position_width, 400
-            state.play_button.draw()
-            load_level_files()
+            elif state.wait_counter_for_game_over == 0:
+                draw_menu_buttons(text_one='Retry Level', text_two='Quit Game')
 
         elif state.game_state == GameState.LEVEL_WIN:
-
-            if state.wait_counter == 0 or state.colorful:
+            if state.wait_counter_for_score_display == 0 or state.colorful:
                 text_color = (0, 0, 139)
             else:
                 text_color = 'orange'
 
             state.colorful = not state.colorful
-
             state.screen.draw.text(
                 str(int(state.timer)),
                 (game_constants.center_position_width - 10, 10),
@@ -186,7 +204,7 @@ def draw():
                 background='grey'
             )
 
-            if state.wait_counter == 0:
+            if state.wait_counter_for_score_display == 0:
                 draw_menu_buttons(text_one='Next Level', text_two='Quit Game')
 
         elif state.game_state == GameState.GAME_WIN:

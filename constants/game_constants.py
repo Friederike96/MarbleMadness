@@ -29,8 +29,8 @@ level_two = 'level_2/map.png'
 level_two_heightmap = 'images/level_2/heightmap_skaliert.png'
 level_two_map_position = (0, 0)
 
-marble_position_level_two = (500, 45)
-marbleh_position_level_two = (500, 60)
+marble_position_level_two = (550, 45)
+marbleh_position_level_two = (550, 60)
 
 overlay_position_level_two = (365, 150)
 

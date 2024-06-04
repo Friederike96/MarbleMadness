@@ -5,11 +5,13 @@ from pygame import image
 from pygame.joystick import Joystick
 
 import constants.game_constants as game_constants
+from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
 
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
+game_over_state: GameOverState = GameOverState.UNKNOWN
 
 screen: Screen = None
 
@@ -32,58 +34,38 @@ heightmap: image = None
 
 overlay_position: set = game_constants.overlay_position_level_one
 
-marble_start_pos_x: int = 0
-marble_start_pos_y: int = 0
-marbleh_start_pos_x: int = 0
-marbleh_start_pos_y: int = 0
-
 # marble
-marble: Actor = Actor(image=game_constants.marble_image, center=(450, 45))
-marbleh: Actor = Actor(image=game_constants.marble_image, midtop=game_constants.marbleh_position_level_one)
+marble: Actor = Actor(image=game_constants.marble_image, center=game_constants.marble_position_level_one)
+marbleh: Actor = Actor(image=game_constants.marble_image, center=game_constants.marbleh_position_level_one)
 marble.dir = marble.speed = 0
+marble_moved_once: bool = False
 
 # coin
 coin: Actor = Actor(image=game_constants.coin_image, center=game_constants.coin_position_level_one)
-start_marble: Actor = Actor(image=game_constants.coin_image, center=(450, 45))
 
 # timer and scores
-clock=pygame.time.Clock()
 previous_clock_time: int = 0
 
 colorful: bool = False
-wait_counter: int = 10
+wait_counter_for_score_display: int = 10
+wait_counter_for_game_over: int = 10
 
 start_timer = False
 not_added_points_and_incremented = True
 
 timer: int = 0
+level_timer = 0
 score: int = 0
 coin_score: int = 0
+
+score_for_current_level = 0
+deducted_score_for_lost_level: bool = False
 
 display_timer_score: int = 0
 display_coin_score: int = 0
 
 printed_timer: bool = False
 countdown_timer: int = 0
-load_start_position: bool = True
 
 # debug mode
 debug: bool = False
-
-# button
-start_button: Actor = Actor(
-    image=game_constants.start_button_image,
-    center=(game_constants.center_position_width, game_constants.start_button_pos_y)
-)
-quit_button: Actor = Actor(
-    image=game_constants.quit_button_image,
-    center=(game_constants.center_position_width, game_constants.quit_button_pos_y)
-)
-back_button: Actor = Actor(
-    image=game_constants.back_button_image,
-    center=(game_constants.center_position_width, game_constants.back_button_pos_y)
-)
-play_button: Actor = Actor(
-    image=game_constants.play_button_image,
-    center=(game_constants.center_position_width, game_constants.play_button_pos_y)
-)
