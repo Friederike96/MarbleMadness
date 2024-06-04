@@ -54,6 +54,9 @@ marble_still_frames = ['marble_still1']  # Add the still images if you have more
 marble_right_frames = ['marble_right1', 'marble_right2', 'marble_right3', 'marble_right4', 'marble_right5']
 marble_bottom_right_frames = ['marble_bottom_right1', 'marble_bottom_right2', 'marble_bottom_right3', 'marble_bottom_right4', 'marble_bottom_right5', 'marble_bottom_right6', 'marble_bottom_right7']
 marble_bottom_frames = ['marble_bottom1', 'marble_bottom2', 'marble_bottom3', 'marble_bottom4', 'marble_bottom5']
+marble_bottom_left_frames = ['marble_bottom_left1', 'marble_bottom_left2', 'marble_bottom_left3', 'marble_bottom_left4', 'marble_bottom_left5', 'marble_bottom_left6', 'marble_bottom_left7']
+marble_left_frames = ['marble_left1', 'marble_left2', 'marble_left3', 'marble_left4', 'marble_left5']
+
 
 # Initialize animation variables
 marble_animation_counter = 0
@@ -273,8 +276,8 @@ def move_marble():
     marble.angle = marble.angle + marble.speed * marble.dir * -10
 
     if marble.angle > 0:
-        marble.angle = -50
-    elif marble.angle < -50:
+        marble.angle = 0
+    elif marble.angle < 0:
         marble.angle = 0
 
     update_marble_animation()
@@ -306,8 +309,12 @@ def update_marble_animation():
             marble.image = marble_still_frames[0]
         elif current_direction == 'right':
             marble.image = marble_right_frames[marble_frame % len(marble_right_frames)]
+        elif current_direction == 'left':
+            marble.image = marble_left_frames[marble_frame % len(marble_left_frames)]
         elif current_direction == 'bottom_right':
             marble.image = marble_bottom_right_frames[marble_frame % len(marble_bottom_right_frames)]
+        elif current_direction == 'bottom_left':
+            marble.image = marble_bottom_left_frames[marble_frame % len(marble_bottom_left_frames)]
         elif current_direction == 'bottom':
             marble.image = marble_bottom_frames[marble_frame % len(marble_bottom_frames)]
 
