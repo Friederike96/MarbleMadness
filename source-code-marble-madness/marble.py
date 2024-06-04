@@ -1,16 +1,9 @@
 import pgzrun
-from pgzero.game import screen
-from pgzero.screen import Screen
 import pygame
-from pygame import image, Surface
-from pgzero.builtins import keyboard, Actor, mouse
-import random
-import math
+from pygame import image
+from pgzero.builtins import Actor, keyboard, music, sounds
 
-#joystick = pygame.joystick.Joystick(0)
-#joystick.init()
-
-
+# Initialize window size
 HEIGHT = 570
 WIDTH = 600
 
@@ -22,8 +15,8 @@ btn_quit = Actor('btn_quit', center=(300, 400))
 btn_back = Actor('btn_back', center=(300, 400))
 btn_play = Actor('btn_play')
 
-marble = Actor('marble', center=(300, 45))
-marbleh = Actor('marble', center=(300, 60))
+marble = Actor('marble_still1', center=(300, 45))
+marbleh = Actor('marble_still1', center=(300, 60))
 marble.dir = marble.speed = 0
 heightmap = image.load('images/height45.png')
 debug = False
@@ -31,12 +24,10 @@ timer = 30
 score = 0
 coinscore = 0
 
-
-
 coin_images = ['coinpos1', 'coinpos2', 'coinpos3', 'coinpos4']
 coin = Actor(coin_images[0])
-coin.x = (150)
-coin.y = (45)
+coin.x = 150
+coin.y = 45
 coin_frame = 0
 coin_animation_counter = 0
 coin_animation_interval = 10
@@ -46,8 +37,8 @@ flag.x = 248
 flag.y = 500
 
 enemy = Actor('shurikensml')
-enemy.x = (130)
-enemy.y = (170)
+enemy.x = 130
+enemy.y = 170
 
 target_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]
 target_index = 0
@@ -57,6 +48,18 @@ timerlevel1 = 60
 
 # Initialize angle for shuriken rotation
 shuriken_angle = 0
+
+# Load animation frames for each direction
+marble_still_frames = ['marble_still1']  # Add the still images if you have more
+marble_right_frames = ['marble_right1', 'marble_right2', 'marble_right3', 'marble_right4', 'marble_right5']
+marble_bottom_right_frames = ['marble_bottom_right1', 'marble_bottom_right2', 'marble_bottom_right3', 'marble_bottom_right4', 'marble_bottom_right5', 'marble_bottom_right6', 'marble_bottom_right7']
+marble_bottom_frames = ['marble_bottom1', 'marble_bottom2', 'marble_bottom3', 'marble_bottom4', 'marble_bottom5']
+
+# Initialize animation variables
+marble_animation_counter = 0
+marble_animation_interval = 5
+marble_frame = 0
+current_direction = 'still'
 
 def draw():
     global game_state
@@ -78,8 +81,8 @@ def draw():
             print("menu maybe?")
         elif game_state == 3:
             screen.blit("map", (0, 0))
-            screen.draw.text('Time: ' + str(round(timer, 2)), (10,10), color=(255,255,255), fontsize=30)
-            screen.draw.text('Score: ' + str(score), (500,10), color=(255,255,255), fontsize=30)
+            screen.draw.text('Time: ' + str(round(timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)
+            screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
             marble.draw()
             enemy.draw()
             flag.draw()
@@ -104,8 +107,7 @@ def draw():
             screen.fill((0, 0, 0))
             screen.draw.text("YOU WIN!", center=(300, 300), color='white')
             screen.draw.text("Press RETURN for start screen!", center=(300, 400), color='white')
-            screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255),
-                             fontsize=80)
+            screen.draw.text("YOU WIN!", center=(300, 300), owidth=0.5, ocolor=(255, 255, 255), color=(0, 0, 255), fontsize=80)
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
 
 def update():
@@ -154,7 +156,6 @@ def update():
     if check_collision_with_flag(marble, flag):
         game_state = 11
         sounds.enemysound.set_volume(0.1)
-
 
     if game_state == 3:
         timer -= 1 / 60
@@ -210,28 +211,50 @@ def update():
         if keyboard.up: #or joystick.get_axis(1) < 0.1:
             marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down: #or joystick.get_axis(1) < -0.1:
-            marbleh.y += 1.5
+        if keyboard.down: #or joystick.get_axis(1) > 0.1:
+            marbleh.y += 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        move_marble()
-        marble.speed = max(0, marble.speed - 0.01)
-    # Damit man vom Startbildschirm ins Menü kommt
-    elif game_state == 0 and keyboard.RETURN:
-        game_state = 1
-    elif game_state == 11 and keyboard.RETURN:
-        game_state = 1
-        marble.pos = 300, 45
-        marbleh.pos = 300, 60
 
-    # Update coin animation
-    coin_animation_counter += 1
-    if coin_animation_counter >= coin_animation_interval:
-        coin_frame = (coin_frame + 1) % len(coin_images)
-        coin.image = coin_images[coin_frame]
-        coin_animation_counter = 0
+    move_marble()
+    marble.speed = max(0, marble.speed - 0.026)
+    animate_coin()
+
+def on_key_down(key):
+    global game_state
+    if key == keys.RETURN:
+        if game_state == 0:
+            game_state = 1
+        elif game_state == 11:
+            game_state = 0
+        elif game_state == 6:
+            game_state = 1
+
+def on_mouse_down(pos):
+    global game_state
+    if game_state == 1:
+        if btn_start.collidepoint(pos):
+            game_state = 3
+        if btn_quit.collidepoint(pos):
+            quit()
+    elif game_state == 6:
+        if btn_play.collidepoint(pos):
+            game_state = 3
+        elif btn_quit.collidepoint(pos):
+            quit()
+
+def get_height(x, y):
+    if x < 0:
+        x = 0
+    elif x > WIDTH - 1:
+        x = WIDTH - 1
+    if y < 0:
+        y = 0
+    elif y > HEIGHT - 1:
+        y = HEIGHT - 1
+    return heightmap.get_at((int(x), int(y)))
 
 def move_marble():
-    global game_state
+    global game_state, marble_frame, marble_animation_counter, current_direction
     center_column = get_height(marbleh.x, marbleh.y)
     left_column = get_height(marbleh.x - 10, marbleh.y + 10)
     right_column = get_height(marbleh.x + 10, marbleh.y + 10)
@@ -254,31 +277,49 @@ def move_marble():
     elif marble.angle < -50:
         marble.angle = 0
 
+    update_marble_animation()
 
-def on_mouse_down(pos, button):
-    global game_state
-    # Wenn man im Menü auf Enter drückt, landet man im Startbildschirm
-    if game_state == 1 and btn_quit.collidepoint(pos) and mouse.LEFT:
-        game_state = 0
-    # Wenn man im Menü auf Start drückt, landet man im ersten Level
-    elif game_state == 1 and btn_start.collidepoint(pos) and mouse.LEFT:
-        game_state = 3
-    # Wenn man im GameOver Bildschirm ist
-    elif game_state == 6:
-        # Marble und marbleh in die Anfangsposition und Speed auf 0 setzen
-        marble.pos = 300, 45
-        marbleh.pos = 300, 60
-        marble.speed = 0
-        marbleh.speed = 0
-        # Wenn man im GameOver Bildschirm auf den Play Button drückt, landet man im ersten Level
-        if btn_play.collidepoint(pos):
-            game_state = 3
-        # Wenn man im GameOver Bildschirm auf Quit drückt, landet man im Startbildschirm
-        elif btn_quit.collidepoint(pos):
-            game_state = 0
+def update_marble_animation():
+    global marble_frame, marble_animation_counter, current_direction
 
-def get_height(x, y):
-    return heightmap.get_at((int(x), int(y)))
+    # Determine the direction
+    if marble.speed > 0:
+        if marble.dir > 0.5:
+            new_direction = 'right'
+        elif marble.dir < -0.5:
+            new_direction = 'left'  # Add frames for left if needed
+        else:
+            new_direction = 'bottom_right'
+    else:
+        new_direction = 'still'
+
+    # If direction changes, reset the frame counter
+    if new_direction != current_direction:
+        current_direction = new_direction
+        marble_frame = 0
+
+    marble_animation_counter += 1
+    if marble_animation_counter >= marble_animation_interval:
+        marble_animation_counter = 0
+
+        if current_direction == 'still':
+            marble.image = marble_still_frames[0]
+        elif current_direction == 'right':
+            marble.image = marble_right_frames[marble_frame % len(marble_right_frames)]
+        elif current_direction == 'bottom_right':
+            marble.image = marble_bottom_right_frames[marble_frame % len(marble_bottom_right_frames)]
+        elif current_direction == 'bottom':
+            marble.image = marble_bottom_frames[marble_frame % len(marble_bottom_frames)]
+
+        marble_frame += 1
+
+def animate_coin():
+    global coin_frame, coin_animation_counter
+    coin_animation_counter += 1
+    if coin_animation_counter >= coin_animation_interval:
+        coin_animation_counter = 0
+        coin.image = coin_images[coin_frame % len(coin_images)]
+        coin_frame += 1
 
 def check_collision_with_shuriken(marble, shuriken):
     # Define a smaller rectangle for the shuriken
@@ -287,10 +328,7 @@ def check_collision_with_shuriken(marble, shuriken):
 
 def check_collision_with_flag(marble, flag):
     # Define a smaller rectangle for the shuriken
-    flag_hitbox = Rect(flag.x - flag.width / 50, flag.y - flag.height / 50, flag.width / 50, flag.height / 50)
+    flag_hitbox = Rect(flag.x - flag.width / 75, flag.y - flag.height / 75, flag.width / 75, flag.height / 75)
     return marble.colliderect(flag_hitbox)
-
-surf = Surface(size=[WIDTH, HEIGHT])
-pgzrun.mod.screen = Screen(surface=surf)
 
 pgzrun.go()
