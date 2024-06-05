@@ -118,8 +118,10 @@ def draw():
                 background='grey'
             )
             state.marble.draw()
+            state.enemy.draw()
+            state.flag.draw()
 
-            if state.coin_score != 2:
+            if state.coin_score != 6:
                 state.coin.draw()
             # screen.blit(game_constants.overlay_image, overlay_position)
 

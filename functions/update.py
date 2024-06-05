@@ -1,12 +1,14 @@
 import random
 from time import sleep
 
+from pgzero import music
 from pgzero.builtins import keyboard
 
-from constants import state
+from constants import state, game_constants
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
+from functions.backend.check_collision import check_collision_with_shuriken, check_collision_with_flag
 from functions.backend.increment_level import increment_level
 from functions.backend.load_level_files import load_level_files
 from functions.backend.move_marble import move_marble
@@ -16,6 +18,14 @@ from functions.frontend.animate_coin import animate_coin
 def update():
     if not state.start_timer and keyboard.left or keyboard.right or keyboard.up or keyboard.down:
         state.start_timer = True
+
+    # Handle music based on game state   # TODO: depending on state ? or just always playing
+    if state.game_state in [GameState.COUNTDOWN, GameState.LEVEL_GAME, GameState.LEVEL_WIN, GameState.GAME_OVER]:
+        if not music.is_playing('level1music'):
+            music.play('level1music')
+        music.set_volume(0.1)
+    else:
+        music.stop()
 
     # vom Startbildschirm ins Menü
     if state.game_state == GameState.START_PAGE and keyboard.RETURN:
@@ -58,6 +68,42 @@ def update():
 
     # Timer-Update während eines Levels, von hier entweder WIN oder GAME_OVER
     elif state.game_state == GameState.LEVEL_GAME:  # and state.start_timer:
+        # Get the current target position
+        target_x, target_y = game_constants.enemy_positions[state.enemy_index]
+        # Calculate the distance between the enemy and the target position
+        distance_x = target_x - state.enemy.x
+        distance_y = target_y - state.enemy.y
+
+        state.enemy_angle += 5
+        if state.enemy_angle >= 360:
+            state.enemy.angle = 0
+
+        # Move the enemy towards the target position
+        if abs(distance_x) > state.enemy_speed:
+            state.enemy.x += state.enemy_speed if distance_x > 0 else -state.enemy_speed
+        else:
+            state.enemy.x = target_x
+
+        if abs(distance_y) > state.enemy_speed:
+            state.enemy.y += state.enemy_speed if distance_y > 0 else -state.enemy_speed
+        else:
+            state.enemy.y = target_y
+
+        # Check if the enemy has reached the current target position
+        if state.enemy.x == target_x and state.enemy.y == target_y:
+            # Move to the next target position
+            state.target_index = (state.enemy_index + 1) % len(game_constants.enemy_positions)
+
+        if check_collision_with_shuriken(state.marble, state.enemy):
+            state.game_state = GameState.GAME_OVER
+            state.game_over_state = GameOverState.ENEMY_HIT
+            state.sounds.enemysound.set_volume(0.1)
+            state.sounds.enemysound.play()
+
+        if check_collision_with_flag(state.marble, state.flag):
+            state.game_state = GameState.LEVEL_WIN
+            state.sounds.enemysound.set_volume(0.1)
+
         state.timer -= 1 / 60
         state.wait_counter_for_score_display = 10
 

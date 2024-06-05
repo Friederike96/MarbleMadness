@@ -116,7 +116,7 @@ def draw():
 def update():
     global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle, coin_frame, coin_animation_counter
 
-    # Handle music based on game state
+    # Handle music based on game state   # TODO: keep adding from here
     if game_state == 3:
         if not music.is_playing('level1music'):
             music.play('level1music')
@@ -169,7 +169,7 @@ def update():
         game_state = 6
 
     sounds.sfx_coin_single1.set_volume(0.1)
-    if marble.colliderect(coin) and score == 0:
+    if marble.colliderect(coin) and score == 0:  # todo: save positions in game constants
         coin.x = 60
         coin.y = 130
         score += 1

@@ -1,5 +1,6 @@
 import pygame
 from pgzero.actor import Actor
+from pgzero.loaders import SoundLoader
 from pgzero.screen import Screen
 from pygame import image
 from pygame.joystick import Joystick
@@ -70,6 +71,9 @@ enemy.y = 170
 enemy_speed = 1
 enemy_angle = 0
 enemy_index = 0
+
+# sounds
+sounds = SoundLoader('music/sounds')
 
 # timer
 timer: int = 0
