@@ -59,12 +59,12 @@ coin_animation_counter = 0
 coin_animation_interval = 10
 
 # flag
-flag = Actor('blueflag')
+flag = Actor(image=game_constants.flag_image)
 flag.x = 248  # todo in constants
 flag.y = 500
 
 # enemy
-enemy = Actor('shurikensml')
+enemy = Actor(image=game_constants.enemy_image)
 enemy.x = 130  # todo in constants
 enemy.y = 170
 enemy_speed = 1

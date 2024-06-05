@@ -17,8 +17,15 @@ marble_bottom_left_frames = ['marble_bottom_left1', 'marble_bottom_left2', 'marb
 marble_left_frames = ['marble_left1', 'marble_left2', 'marble_left3', 'marble_left4', 'marble_left5']
 
 
-coin_images = ['coin/coinpos1.png', 'coinpos2', 'coinpos3', 'coinpos4']
+coin_images = [
+    'coin/coinpos1.png',
+    'coin/coinpos2.png',
+    'coin/coinpos3.png',
+    'coin/coinpos4.png'
+]
 overlay_image = 'objects/overlay.png'
+flag_image = 'flag/blueflag.png'
+enemy_image = 'enemy/shurikensml.png'
 
 # enemy positions
 enemy_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]

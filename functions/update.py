@@ -10,6 +10,7 @@ from enumerations.level_state import LevelState
 from functions.backend.increment_level import increment_level
 from functions.backend.load_level_files import load_level_files
 from functions.backend.move_marble import move_marble
+from functions.frontend.animate_coin import animate_coin
 
 
 def update():
@@ -97,8 +98,8 @@ def update():
                 state.marble.speed = min(1, state.marble.speed + 0.1)
                 state.marble_moved_once = True
 
-
             move_marble()
+            animate_coin()
             state.marble.speed = max(0, state.marble.speed - 0.01)
 
     # vom gewonnen Level zum nächsten oder Spiel beenden
