@@ -68,6 +68,42 @@ def update():
 
     # Timer-Update während eines Levels, von hier entweder WIN oder GAME_OVER
     elif state.game_state == GameState.LEVEL_GAME:  # and state.start_timer:
+        state.sounds.sfx_coin_single1.set_volume(0.1)
+        state.sounds.sfx_coin_single1.play()
+        # if marble.colliderect(coin) and score == 0:  # todo: save positions in game constants and modularize
+        #     coin.x = 60
+        #     coin.y = 130
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
+        # elif marble.colliderect(coin) and score == 1:
+        #     coin.x = 160
+        #     coin.y = 45
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
+        # elif marble.colliderect(coin) and score == 2:
+        #     coin.x = 300
+        #     coin.y = 360
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
+        # elif marble.colliderect(coin) and score == 3:
+        #     coin.x = 360
+        #     coin.y = 200
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
+        # elif marble.colliderect(coin) and score == 4:
+        #     coin.x = 240
+        #     coin.y = 520
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
+        # elif marble.colliderect(coin) and score == 5:
+        #     score += 1
+        #     coinscore += 1
+        #     sounds.sfx_coin_single1.play()
         # Get the current target position
         target_x, target_y = game_constants.enemy_positions[state.enemy_index]
         # Calculate the distance between the enemy and the target position
@@ -127,7 +163,7 @@ def update():
             if keyboard.left or state.joystick is not None and state.joystick.get_axis(0) < -0.1:
                 state.marble.dir = max(state.marble.dir - 1, -1)
                 state.marble.speed = min(1, state.marble.speed + 0.1)
-                state.marble_moved_once = True
+                state.marble_moved_once = True  # todo: still needed??
 
             if keyboard.right or state.joystick is not None and state.joystick.get_axis(0) > 0.1:
                 state.marble.dir = min(state.marble.dir + 1, 1)
@@ -135,12 +171,12 @@ def update():
                 state.marble_moved_once = True
 
             if keyboard.up or state.joystick is not None and state.joystick.get_axis(1) < 0.1:
-                state.marbleh.y -= 2
+                state.marbleh.y -= 2  # todo: change how fast? > 2,5
                 state.marble.speed = min(1, state.marble.speed + 0.1)
                 state.marble_moved_once = True
 
             if keyboard.down or state.joystick is not None and state.joystick.get_axis(1) < -0.1:
-                state.marbleh.y += 1.5
+                state.marbleh.y += 1.5  # todo: change how fast? > 2,5
                 state.marble.speed = min(1, state.marble.speed + 0.1)
                 state.marble_moved_once = True
 

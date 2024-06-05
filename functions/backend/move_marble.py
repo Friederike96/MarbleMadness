@@ -2,6 +2,7 @@ from constants import state, game_constants
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
+from functions.frontend.update_marble_animation import update_marble_animation
 
 
 def move_marble():
@@ -42,12 +43,22 @@ def move_marble():
             state.game_state = GameState.LEVEL_WIN
             state.not_added_points_and_incremented = True
 
+    update_marble_animation()
+
 
 # def on_key_down(key):
 # print(key)
 
 
 def get_height(x, y):
+    # if x < 0:
+    #     x = 0
+    # elif x > WIDTH - 1:
+    #     x = WIDTH - 1
+    # if y < 0:
+    #     y = 0
+    # elif y > HEIGHT - 1:
+    #     y = HEIGHT - 1
     if x > game_constants.WIDTH:
         x = game_constants.WIDTH
     if y > game_constants.HEIGHT:

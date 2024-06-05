@@ -42,8 +42,8 @@ current_map_position: set = ()
 flag_position: set = game_constants.flag_position_level_one
 
 # marble
-marble: Actor = Actor(image=game_constants.marble_image, center=game_constants.marble_position_level_one)
-marbleh: Actor = Actor(image=game_constants.marble_image, center=game_constants.marbleh_position_level_one)
+marble: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marble_position_level_one)
+marbleh: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marbleh_position_level_one)
 marble.dir = marble.speed = 0
 marble_moved_once: bool = False
 

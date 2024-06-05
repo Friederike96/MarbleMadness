@@ -9,13 +9,48 @@ base_path = os.getcwd()
 
 marble_image = 'objects/marble.png'
 
-#marble_still_frames = ['marble_still1']  # Add the still images if you have more
-marble_right_frames = ['marble_right1', 'marble_right2', 'marble_right3', 'marble_right4', 'marble_right5']
-marble_bottom_right_frames = ['marble_bottom_right1', 'marble_bottom_right2', 'marble_bottom_right3', 'marble_bottom_right4', 'marble_bottom_right5', 'marble_bottom_right6', 'marble_bottom_right7']
-marble_bottom_frames = ['marble_bottom1', 'marble_bottom2', 'marble_bottom3', 'marble_bottom4', 'marble_bottom5']
-marble_bottom_left_frames = ['marble_bottom_left1', 'marble_bottom_left2', 'marble_bottom_left3', 'marble_bottom_left4', 'marble_bottom_left5', 'marble_bottom_left6', 'marble_bottom_left7']
-marble_left_frames = ['marble_left1', 'marble_left2', 'marble_left3', 'marble_left4', 'marble_left5']
-
+marble_still_frames = [
+    'marble/marble_still1'
+]  # Add the still images if you have more
+marble_right_frames = [
+    'marble/marble_right1',
+    'marble/marble_right2',
+    'marble/marble_right3',
+    'marble/marble_right4',
+    'marble/marble_right5'
+]
+marble_bottom_right_frames = [
+    'marble/marble_bottom_right1',
+    'marble/marble_bottom_right2',
+    'marble/marble_bottom_right3',
+    'marble/marble_bottom_right4',
+    'marble/marble_bottom_right5',
+    'marble/marble_bottom_right6',
+    'marble/marble_bottom_right7'
+]
+marble_bottom_frames = [
+    'marble/marble_bottom1',
+    'marble/marble_bottom2',
+    'marble/marble_bottom3',
+    'marble/marble_bottom4',
+    'marble/marble_bottom5'
+]
+marble_bottom_left_frames = [
+    'marble/marble_bottom_left1',
+    'marble/marble_bottom_left2',
+    'marble/marble_bottom_left3',
+    'marble/marble_bottom_left4',
+    'marble/marble_bottom_left5',
+    'marble/marble_bottom_left6',
+    'marble/marble_bottom_left7'
+]
+marble_left_frames = [
+    'marble/marble_left1',
+    'marble/marble_left2',
+    'marble/marble_left3',
+    'marble/marble_left4',
+    'marble/marble_left5'
+]
 
 coin_images = [
     'coin/coinpos1.png',
@@ -23,6 +58,7 @@ coin_images = [
     'coin/coinpos3.png',
     'coin/coinpos4.png'
 ]
+
 overlay_image = 'objects/overlay.png'
 flag_image = 'flag/blueflag.png'
 enemy_image = 'enemy/shurikensml.png'
