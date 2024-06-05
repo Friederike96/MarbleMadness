@@ -1,6 +1,16 @@
 import pygame
 
 # colors
+black = (0, 0, 0)
+grey = ''
+orange = ''
+white = ''
+blue = ''
+
+# font sizes
+font_small = 15
+font_medium = 20
+font_large = 35
 
 
 # fonts
