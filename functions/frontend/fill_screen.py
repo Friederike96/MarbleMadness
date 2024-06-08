@@ -1,11 +1,11 @@
 from typing import Any
 
 from constants import state
-from constants.gui_constants import COLORS
+from enumerations.color import Color
 
 
 def fill_screen_black():
-    fill_screen_with_background(color=COLORS.BLACK.value)
+    fill_screen_with_background(color=Color.BLACK.value)
 
 
 def fill_screen_with_background(color: Any):

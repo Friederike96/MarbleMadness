@@ -1,5 +1,6 @@
 from constants import state, game_constants
-from constants.gui_constants import COLORS, FONTSIZES
+from enumerations.color import Color
+from enumerations.font_size import FontSize
 from functions.frontend.get_font import get_monospaced_font
 
 
@@ -19,34 +20,34 @@ def draw_timer_info(timer: int = None):
     state.screen.draw.text(
         text=str(timer_to_print),
         pos=(game_constants.center_position_width - 10, 10),
-        color=COLORS.BLUE.value,
+        color=Color.BLUE.value,
         fontname=get_monospaced_font(),
         fontsize=20,
-        background=COLORS.GREY.value,
+        background=Color.GREY.value,
         align='center'
     )
 
 
 def draw_score_info(text_color_score: tuple = None):
-    text_color = COLORS.BLUE.value
+    text_color = Color.BLUE.value
     if text_color_score:
         text_color = text_color_score
 
     state.screen.draw.text(
         'Score',
         (10, 10),
-        color=COLORS.BLUE.value,
+        color=Color.BLUE.value,
         fontname=get_monospaced_font(),
-        fontsize=FONTSIZES.SMALL.value,
-        background=COLORS.GREY.value
+        fontsize=FontSize.SMALL.value,
+        background=Color.GREY.value
     )
     state.screen.draw.text(
         str(state.score) + '',
         (10, 30),
         color=text_color,
         fontname=get_monospaced_font(),
-        fontsize=FONTSIZES.SMALL.value,
-        background=COLORS.GREY.value
+        fontsize=FontSize.SMALL.value,
+        background=Color.GREY.value
     )
 
 
@@ -56,14 +57,14 @@ def draw_bonus_score_info(text_color: tuple):
         pos=(10, 50),
         color=text_color,
         fontname=get_monospaced_font(),
-        fontsize=FONTSIZES.SMALL.value,
-        background=COLORS.GREY.value
+        fontsize=FontSize.SMALL.value,
+        background=Color.GREY.value
     )
     state.screen.draw.text(
         text=f'Bonus for coins:  {state.display_coin_score}',
         pos=(10, 70),
         color=text_color,
         fontname=get_monospaced_font(),
-        fontsize=FONTSIZES.SMALL.value,
-        background=COLORS.GREY.value
+        fontsize=FontSize.SMALL.value,
+        background=Color.GREY.value
     )

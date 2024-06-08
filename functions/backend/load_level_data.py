@@ -4,7 +4,8 @@ from enumerations.level_state import LevelState
 from pygame import image
 
 
-def load_level_files():
+def load_level_data():
+
     if state.current_level == LevelState.LEVEL_ONE:
         state.current_map = game_constants.level_one
         state.current_heightmap = game_constants.level_one_heightmap
@@ -14,12 +15,10 @@ def load_level_files():
         state.marble.pos = game_constants.marble_position_level_one
         state.marbleh.pos = game_constants.marbleh_position_level_one
 
-        state.start_timer = False
-
         state.timer = game_constants.timer_level_one
         state.countdown_timer = int(state.timer)
 
-        state.previous_clock_time = 0
+        state.previous_timer_value = 0
 
         state.marble_moved_once = False
 
@@ -32,12 +31,10 @@ def load_level_files():
         state.marble.pos = game_constants.marble_position_level_two
         state.marbleh.pos = game_constants.marbleh_position_level_two
 
-        state.start_timer = False
-
         state.timer = game_constants.timer_level_two
-        state.countdown_timer = state.timer
+        state.countdown_timer = int(state.timer)
 
-        state.previous_clock_time = 0
+        state.previous_timer_value = 0
         state.marble_moved_once = False
 
     elif state.current_level == LevelState.LEVEL_THREE:

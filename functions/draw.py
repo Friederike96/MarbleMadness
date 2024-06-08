@@ -1,4 +1,5 @@
 from constants import state
+from enumerations.color import Color
 from enumerations.game_state import GameState
 from functions.frontend.draw_countdown_message import draw_countdown_message
 from functions.frontend.draw_game_over_message import draw_game_over_message
@@ -53,9 +54,9 @@ def draw():
     elif state.game_state == GameState.LEVEL_WIN:
         fill_screen_with_map()
         if state.wait_counter_for_score_display == 0 or state.blue_text:
-            text_color = (0, 0, 139)
+            text_color = Color.BLUE.value
         else:
-            text_color = 'orange'
+            text_color = Color.ORANGE.value
 
         state.blue_text = not state.blue_text  # todo in update
         draw_timer_and_score_info(text_color_score=text_color)

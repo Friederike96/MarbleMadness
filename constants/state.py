@@ -6,6 +6,7 @@ from pygame import image
 from pygame.joystick import Joystick
 
 import constants.game_constants as game_constants
+from enumerations.button import Button
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
@@ -14,6 +15,7 @@ from enumerations.level_state import LevelState
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ONE
 game_over_state: GameOverState = GameOverState.UNKNOWN
+selected_button: Button = Button.PLAY
 
 screen: Screen = None
 
@@ -21,12 +23,6 @@ start_game: bool = True
 
 # Joystick
 joystick: Joystick = None
-
-# Buttons
-# TODO
-
-play_game_color: str = 'orange'  # todo: make bool
-quit_color: str = 'white'
 
 # current map and heightmap, set in load_level_files
 current_map: str = ''
@@ -68,8 +64,8 @@ flag.y = 500
 enemy = Actor(image=game_constants.enemy_image)
 enemy.x = 130  # todo in constants
 enemy.y = 170
+enemy.angle = 0
 enemy_speed = 1
-enemy_angle = 0
 enemy_index = 0
 
 # sounds
@@ -77,8 +73,7 @@ sounds = SoundLoader('music/sounds')
 
 # timer
 timer: int = 0
-start_timer = False
-previous_clock_time: int = 0
+previous_timer_value: int = 0
 
 # scores
 score: int = 0

@@ -7,8 +7,8 @@ from pgzero.screen import Screen
 from pygame import Surface
 
 from constants import state
-from functions.backend.initialize_joystick import initialize_joystick
 from functions.draw import draw
+from functions.initialize_joystick import initialize_joystick
 from functions.process_input import process_input
 from functions.update import update
 

@@ -4,27 +4,30 @@ from time import sleep
 from pgzero import music
 from pgzero.builtins import keyboard
 
-from constants import state, game_constants
+from constants import state
+from enumerations.button import Button
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
-from functions.backend.check_collision import check_collision_with_shuriken, check_collision_with_flag
-from functions.backend.increment_level import increment_level
-from functions.backend.load_level_files import load_level_files
-from functions.backend.move_marble import move_marble
-from functions.backend.animate_coin import animate_coin
 from functions.process_input import process_input
+from functions.backend.add_scores_during_game_play import add_scores_during_game_play
+from functions.backend.animate_coin import animate_coin
+from functions.backend.check_collision import check_collision_with_flag
+from functions.backend.handle_button_selection import handle_button_selection
+from functions.backend.increment_level import increment_level
+from functions.backend.load_level_data import load_level_data
+from functions.backend.move_marble import move_marble
+from functions.backend.update_coin import handle_coin_collision, update_coin_position
+from functions.backend.update_enemy import handle_enemy_collision, update_enemy_position
+from functions.backend.update_marble_position import update_marble_position
 
 
 def update():
     process_input()
 
     if state.start_game:
-        load_level_files()
+        load_level_data()
         state.start_game = False
-
-    if not state.start_timer and keyboard.left or keyboard.right or keyboard.up or keyboard.down:
-        state.start_timer = True
 
     # Handle music based on game state   # TODO: depending on state ? or just always playing
     if state.game_state in [GameState.COUNTDOWN, GameState.LEVEL_GAME, GameState.LEVEL_WIN, GameState.GAME_OVER]:
@@ -37,35 +40,19 @@ def update():
     # vom Startbildschirm ins Menü
     if state.game_state == GameState.START_PAGE and keyboard.RETURN:
         state.game_state = GameState.MENU_PAGE
-        load_level_files()
-        state.play_game_color = 'orange'
-        state.quit_color = 'white'
-        sleep(0.2)
+        load_level_data()
+        state.selected_button = Button.PLAY
+        sleep(0.2)  # todo update sleep
 
     # vom Menü in den Countdown oder zurück zur Startseite
     elif state.game_state == GameState.MENU_PAGE:
-        if state.play_game_color == 'orange':
-            if keyboard.down:
-                state.quit_color = 'orange'
-                state.play_game_color = 'white'
-
-            elif keyboard.RETURN:
-                state.game_state = GameState.COUNTDOWN
-                state.countdown_timer = state.timer
-
-        elif state.quit_color == 'orange':
-            if keyboard.up:
-                state.play_game_color = 'orange'
-                state.quit_color = 'white'
-
-            elif keyboard.RETURN:
-                quit_game()
+        handle_button_selection()
 
     # vom Countdown zum Level spielen
     elif state.game_state == GameState.COUNTDOWN:
-        if int(state.countdown_timer) == 0:
+        if int(state.countdown_timer) <= 0:
             state.game_state = GameState.LEVEL_GAME
-            state.wait_counter_for_score_display = 10
+            state.wait_counter_for_score_display = 10  # todo maybe in load level files or so
             sleep(0.2)
 
         else:
@@ -73,122 +60,38 @@ def update():
             sleep(0.2)
 
     # Timer-Update während eines Levels, von hier entweder WIN oder GAME_OVER
-    elif state.game_state == GameState.LEVEL_GAME:  # and state.start_timer:
-        state.sounds.sfx_coin_single1.set_volume(0.1)
-        state.sounds.sfx_coin_single1.play()
-        # if marble.colliderect(coin) and score == 0:  # todo: save positions in game constants and modularize
-        #     coin.x = 60
-        #     coin.y = 130
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # elif marble.colliderect(coin) and score == 1:
-        #     coin.x = 160
-        #     coin.y = 45
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # elif marble.colliderect(coin) and score == 2:
-        #     coin.x = 300
-        #     coin.y = 360
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # elif marble.colliderect(coin) and score == 3:
-        #     coin.x = 360
-        #     coin.y = 200
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # elif marble.colliderect(coin) and score == 4:
-        #     coin.x = 240
-        #     coin.y = 520
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # elif marble.colliderect(coin) and score == 5:
-        #     score += 1
-        #     coinscore += 1
-        #     sounds.sfx_coin_single1.play()
-        # Get the current target position
-        target_x, target_y = game_constants.enemy_positions[state.enemy_index]
-        # Calculate the distance between the enemy and the target position
-        distance_x = target_x - state.enemy.x
-        distance_y = target_y - state.enemy.y
-
-        state.enemy_angle += 5
-        if state.enemy_angle >= 360:
-            state.enemy.angle = 0
-
-        # Move the enemy towards the target position
-        if abs(distance_x) > state.enemy_speed:
-            state.enemy.x += state.enemy_speed if distance_x > 0 else -state.enemy_speed
-        else:
-            state.enemy.x = target_x
-
-        if abs(distance_y) > state.enemy_speed:
-            state.enemy.y += state.enemy_speed if distance_y > 0 else -state.enemy_speed
-        else:
-            state.enemy.y = target_y
-
-        # Check if the enemy has reached the current target position
-        if state.enemy.x == target_x and state.enemy.y == target_y:
-            # Move to the next target position
-            state.target_index = (state.enemy_index + 1) % len(game_constants.enemy_positions)
-
-        if check_collision_with_shuriken(state.marble, state.enemy):
-            state.game_state = GameState.GAME_OVER
-            state.game_over_state = GameOverState.ENEMY_HIT
-            state.sounds.enemysound.set_volume(0.1)
-            state.sounds.enemysound.play()
-
-        if check_collision_with_flag(state.marble, state.flag):
-            state.game_state = GameState.LEVEL_WIN
-            state.sounds.enemysound.set_volume(0.1)
+    elif state.game_state == GameState.LEVEL_GAME:
 
         state.timer -= 1 / 60
-        state.wait_counter_for_score_display = 10
+        add_scores_during_game_play()
+        state.wait_counter_for_score_display = 10  # todo set when win or game over?
 
-        if state.previous_clock_time == 0:
-            state.previous_clock_time = round(state.timer, 2)
-
-        if round(state.timer, 2) < state.previous_clock_time - 0.2 and state.previous_clock_time != 0:
-            state.score += 10
-            state.score_for_current_level += 10
-            state.previous_clock_time = round(state.timer, 2)
-
+        # timer over
         if state.timer <= 0:
             state.game_state = GameState.GAME_OVER
             state.game_over_state = GameOverState.TIMER_UP
-        else:  # todo: user input should be in process_input
+
+        # timer still running
+        else:
             if state.marble.colliderect(state.coin) and state.score != 2:
                 state.coin.x = random.randint(150, 450)
                 state.coin.y = random.randint(45, 500)
                 state.coin_score += 250
 
-            if keyboard.left or state.joystick is not None and state.joystick.get_axis(0) < -0.1:
-                state.marble.dir = max(state.marble.dir - 1, -1)
-                state.marble.speed = min(1, state.marble.speed + 0.1)
-                state.marble_moved_once = True  # todo: still needed??
-
-            if keyboard.right or state.joystick is not None and state.joystick.get_axis(0) > 0.1:
-                state.marble.dir = min(state.marble.dir + 1, 1)
-                state.marble.speed = min(1, state.marble.speed + 0.1)
-                state.marble_moved_once = True
-
-            if keyboard.up or state.joystick is not None and state.joystick.get_axis(1) < 0.1:
-                state.marbleh.y -= 2  # todo: change how fast? > 2,5
-                state.marble.speed = min(1, state.marble.speed + 0.1)
-                state.marble_moved_once = True
-
-            if keyboard.down or state.joystick is not None and state.joystick.get_axis(1) < -0.1:
-                state.marbleh.y += 1.5  # todo: change how fast? > 2,5
-                state.marble.speed = min(1, state.marble.speed + 0.1)
-                state.marble_moved_once = True
-
+            update_marble_position()
             move_marble()
-            animate_coin()
             state.marble.speed = max(0, state.marble.speed - 0.01)
+
+            handle_enemy_collision()
+            update_enemy_position()
+
+            handle_coin_collision()
+            update_coin_position()
+            animate_coin()
+
+            if check_collision_with_flag(state.marble, state.flag):
+                state.game_state = GameState.LEVEL_WIN
+                state.sounds.enemysound.set_volume(0.1)
 
     # vom gewonnen Level zum nächsten oder Spiel beenden
     elif state.game_state == GameState.LEVEL_WIN:
@@ -201,23 +104,7 @@ def update():
             state.wait_counter_for_score_display -= 1
             sleep(0.2)
         else:
-            if state.play_game_color == 'orange':
-                if keyboard.down:
-                    state.quit_color = 'orange'
-                    state.play_game_color = 'white'
-
-                elif keyboard.RETURN:
-                    state.game_state = GameState.COUNTDOWN
-                    load_level_files()
-                    state.countdown_timer = state.timer
-
-            elif state.quit_color == 'orange':
-                if keyboard.up:
-                    state.play_game_color = 'orange'
-                    state.quit_color = 'white'
-
-                elif keyboard.RETURN:
-                    quit_game()
+            handle_button_selection()
 
     # vom verlorenen Level das Level wiederholen oder Spiel beenden
     elif state.game_state == GameState.GAME_OVER:
@@ -235,23 +122,7 @@ def update():
             if state.wait_counter_for_game_over == 0:
                 sleep(0.5)
         else:
-            if state.play_game_color == 'orange':
-                if keyboard.down:
-                    state.quit_color = 'orange'
-                    state.play_game_color = 'white'
-
-                elif keyboard.RETURN:
-                    state.game_state = GameState.COUNTDOWN
-                    load_level_files()
-                    reset_state()
-
-            elif state.quit_color == 'orange':
-                if keyboard.up:
-                    state.play_game_color = 'orange'
-                    state.quit_color = 'white'
-
-                elif keyboard.RETURN:
-                    quit_game()
+            handle_button_selection()
 
     # vom gewonnen Spiel zurück zur Startseite
     elif state.game_state == GameState.GAME_WIN and keyboard.RETURN:
@@ -284,16 +155,12 @@ def quit_game():
 
     state.start_game = True
 
-    state.play_game_color = 'orange'
-    state.quit_color = 'white'
-
-    state.previous_clock_time = 0
+    state.previous_timer_value = 0
 
     state.blue_text = False
     state.wait_counter_for_score_display = 10
     state.wait_counter_for_game_over = 10
 
-    state.start_timer = False
     state.not_added_points_and_incremented = True
 
     state.timer = 0

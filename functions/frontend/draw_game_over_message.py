@@ -1,5 +1,6 @@
 from constants import state, game_constants
-from constants.gui_constants import COLORS, FONTSIZES
+from enumerations.color import Color
+from enumerations.font_size import FontSize
 from enumerations.game_over_state import GameOverState
 from functions.frontend.calculate_text_size import calculate_text_size
 from functions.frontend.get_font import get_monospaced_font
@@ -7,9 +8,9 @@ from functions.frontend.get_font import get_monospaced_font
 
 def draw_game_over_message():
     if state.blue_text:
-        text_color = COLORS.BLUE.value
+        text_color = Color.BLUE.value
     else:
-        text_color = COLORS.ORANGE.value
+        text_color = Color.ORANGE.value
 
     if state.game_over_state == GameOverState.TIMER_UP:
         draw_given_game_over_message(
@@ -31,7 +32,7 @@ def draw_game_over_message():
 
 
 def draw_given_game_over_message(text: str, text_color: tuple):
-    size = FONTSIZES.MEDIUM.value
+    size = FontSize.MEDIUM.value
     text_width, text_height = calculate_text_size(text=text, size=size)
 
     text_position_width = game_constants.center_position_width - (text_width / 2)

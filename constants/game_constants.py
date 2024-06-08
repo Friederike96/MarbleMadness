@@ -59,7 +59,6 @@ coin_images = [
     'coin/coinpos4.png'
 ]
 
-overlay_image = 'objects/overlay.png'
 flag_image = 'flag/blueflag.png'
 enemy_image = 'enemy/shurikensml.png'
 
@@ -97,3 +96,7 @@ timer_level_two = 40
 # menu
 center_position_width = WIDTH/2
 center_position_height = HEIGHT/2
+
+# fonts
+marble_madness = 'marble_madness'
+courier_new = 'couriernew'
