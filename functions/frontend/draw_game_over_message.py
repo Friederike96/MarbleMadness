@@ -1,41 +1,47 @@
 from constants import state, game_constants
+from constants.gui_constants import COLORS, FONTSIZES
 from enumerations.game_over_state import GameOverState
+from functions.frontend.calculate_text_size import calculate_text_size
 from functions.frontend.get_font import get_monospaced_font
 
 
 def draw_game_over_message():
-    if state.colorful:
-        text_color = (0, 0, 139)
+    if state.blue_text:
+        text_color = COLORS.BLUE.value
     else:
-        text_color = 'orange'
+        text_color = COLORS.ORANGE.value
 
-    state.colorful = not state.colorful
     if state.game_over_state == GameOverState.TIMER_UP:
-        state.screen.draw.text(
-            'Timer is up !',
-            (game_constants.center_position_width - 200, game_constants.center_position_height-50),
-            color=text_color,
-            fontname=get_monospaced_font(),
-            fontsize=30,
-            background='grey'
+        draw_given_game_over_message(
+            text='Timer is up !',
+            text_color=text_color
         )
 
     elif state.game_over_state == GameOverState.FALL_OVER_EDGE:
-        state.screen.draw.text(
-            'Oops, you fell over the edge !',
-            (game_constants.center_position_width - 300, game_constants.center_position_height-50),
-            color=text_color,
-            fontname=get_monospaced_font(),
-            fontsize=20,
-            background='grey'
+        draw_given_game_over_message(
+            text='Oops, you fell over the edge !',
+            text_color=text_color
         )
 
     elif state.game_over_state == GameOverState.ENEMY_HIT:
-        state.screen.draw.text(
-            'You hit the enemy !',
-            (game_constants.center_position_width - 200, game_constants.center_position_height-50),
-            color=text_color,
-            fontname=get_monospaced_font(),
-            fontsize=20,
-            background='grey'
+        draw_given_game_over_message(
+            text='You hit the enemy !',
+            text_color=text_color
         )
+
+
+def draw_given_game_over_message(text: str, text_color: tuple):
+    size = FONTSIZES.MEDIUM.value
+    text_width, text_height = calculate_text_size(text=text, size=size)
+
+    text_position_width = game_constants.center_position_width - (text_width / 2)
+
+    state.screen.draw.text(
+        text=text,
+        pos=(text_position_width, game_constants.center_position_height-100),  # todo: use constant
+        color=text_color,
+        fontname=get_monospaced_font(),
+        fontsize=size,
+        background='grey',
+        align='center'
+    )

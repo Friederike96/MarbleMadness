@@ -97,17 +97,3 @@ timer_level_two = 40
 # menu
 center_position_width = WIDTH/2
 center_position_height = HEIGHT/2
-
-enter_button_pos_y = center_position_height
-
-start_button_image = 'buttons/btn_start'
-start_button_pos_y = 300
-
-quit_button_image ='buttons/btn_quit'
-quit_button_pos_y = 400
-
-back_button_image = 'buttons/btn_back'
-back_button_pos_y = 400
-
-play_button_image = 'buttons/btn_play'
-play_button_pos_y = 400

@@ -12,10 +12,17 @@ from functions.backend.check_collision import check_collision_with_shuriken, che
 from functions.backend.increment_level import increment_level
 from functions.backend.load_level_files import load_level_files
 from functions.backend.move_marble import move_marble
-from functions.frontend.animate_coin import animate_coin
+from functions.backend.animate_coin import animate_coin
+from functions.process_input import process_input
 
 
 def update():
+    process_input()
+
+    if state.start_game:
+        load_level_files()
+        state.start_game = False
+
     if not state.start_timer and keyboard.left or keyboard.right or keyboard.up or keyboard.down:
         state.start_timer = True
 
@@ -45,7 +52,6 @@ def update():
             elif keyboard.RETURN:
                 state.game_state = GameState.COUNTDOWN
                 state.countdown_timer = state.timer
-                state.printed_timer = False
 
         elif state.quit_color == 'orange':
             if keyboard.up:
@@ -62,7 +68,7 @@ def update():
             state.wait_counter_for_score_display = 10
             sleep(0.2)
 
-        elif state.printed_timer:
+        else:
             state.countdown_timer -= 5
             sleep(0.2)
 
@@ -154,7 +160,7 @@ def update():
         if state.timer <= 0:
             state.game_state = GameState.GAME_OVER
             state.game_over_state = GameOverState.TIMER_UP
-        else:
+        else:  # todo: user input should be in process_input
             if state.marble.colliderect(state.coin) and state.score != 2:
                 state.coin.x = random.randint(150, 450)
                 state.coin.y = random.randint(45, 500)
@@ -204,7 +210,6 @@ def update():
                     state.game_state = GameState.COUNTDOWN
                     load_level_files()
                     state.countdown_timer = state.timer
-                    state.printed_timer = False
 
             elif state.quit_color == 'orange':
                 if keyboard.up:
@@ -216,6 +221,8 @@ def update():
 
     # vom verlorenen Level das Level wiederholen oder Spiel beenden
     elif state.game_state == GameState.GAME_OVER:
+        state.blue_text = not state.blue_text
+
         if not state.deducted_score_for_lost_level:
             state.score = state.score - state.score_for_current_level
             if state.score < 0:
@@ -266,7 +273,6 @@ def add_points_for_remaining_time():
 
 def reset_state():
     state.countdown_timer = state.timer
-    state.printed_timer = False
     state.wait_counter_for_game_over = 10
     state.score_for_current_level = 0
     state.deducted_score_for_lost_level = False
@@ -283,7 +289,7 @@ def quit_game():
 
     state.previous_clock_time = 0
 
-    state.colorful = False
+    state.blue_text = False
     state.wait_counter_for_score_display = 10
     state.wait_counter_for_game_over = 10
 
@@ -300,7 +306,6 @@ def quit_game():
     state.display_coin_score = 0
     state.display_timer_score = 0
 
-    state.printed_timer = False
     state.countdown_timer = 0
 
     sleep(0.2)

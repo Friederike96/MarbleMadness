@@ -25,7 +25,7 @@ joystick: Joystick = None
 # Buttons
 # TODO
 
-play_game_color: str = 'orange'
+play_game_color: str = 'orange'  # todo: make bool
 quit_color: str = 'white'
 
 # current map and heightmap, set in load_level_files
@@ -98,7 +98,7 @@ score_for_current_level = 0
 deducted_score_for_lost_level: bool = False
 
 # needed for determine which color to use when blinking (level won or game over message)
-colorful: bool = False
+blue_text: bool = False
 
 # needed for displaying blinking score when won level
 wait_counter_for_score_display: int = 10

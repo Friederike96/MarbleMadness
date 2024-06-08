@@ -2,7 +2,7 @@ from constants import state, game_constants
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
-from functions.frontend.update_marble_animation import update_marble_animation
+from functions.backend.update_marble_animation import update_marble_animation
 
 
 def move_marble():

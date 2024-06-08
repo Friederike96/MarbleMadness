@@ -26,7 +26,7 @@ pgzrun.mod.screen = Screen(surface=surf)
 state.screen = pgzrun.mod.screen
 pgzrun.go()
 
-while True:
-    process_input()
-    update()
-    draw()
+# while True:
+#     process_input()
+#     update()
+#     draw()

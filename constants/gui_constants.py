@@ -1,24 +1,21 @@
-import pygame
+from enum import Enum
 
-# colors
-black = (0, 0, 0)
-grey = ''
-orange = ''
-white = ''
-blue = ''
 
-# font sizes
-font_small = 15
-font_medium = 20
-font_large = 35
+class COLORS(Enum):
+    BLACK = (0, 0, 0)
+    GREY = (160, 160, 160)
+    ORANGE = (255, 128, 0)
+    WHITE = (255, 255, 255)
+    BLUE = (0, 80, 200)
+
+
+class FONTSIZES(Enum):
+    SMALL = 15
+    MEDIUM = 20
+    LARGE = 40
+    SUPER_LARGE = 60
 
 
 # fonts
-
-all_fonts: list = pygame.font.get_fonts()
-
-
-courier_new = 'couriernew'
-lucida_console = 'lucidaconsole'
-consolas = 'consolas'
 marble_madness = 'marble_madness'
+courier_new = 'couriernew'
