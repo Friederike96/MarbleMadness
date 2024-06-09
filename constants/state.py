@@ -21,6 +21,7 @@ start_game: bool = True
 
 # Joystick
 joystick: Joystick = None
+DEAD_ZONE = 0.1
 
 # Buttons
 # TODO
