@@ -17,6 +17,8 @@ current_level: LevelState = LevelState.LEVEL_ONE
 game_over_state: GameOverState = GameOverState.UNKNOWN
 selected_button: Button = Button.PLAY
 
+
+
 screen: Screen = None
 
 start_game: bool = True
@@ -34,12 +36,9 @@ heightmap: image = None
 # position of map and heightmap, depends on level
 current_map_position: set = ()
 
-# position of flag
-flag_position: set = game_constants.flag_position_level_one
-
 # marble
-marble: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marble_position_level_one)
-marbleh: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marbleh_position_level_one)
+marble: Actor = Actor(image=game_constants.marble_still_frames[0])
+marbleh: Actor = Actor(image=game_constants.marble_still_frames[0])
 marble.dir = marble.speed = 0
 marble_moved_once: bool = False
 
@@ -50,10 +49,11 @@ marble_frame = 0
 current_direction = 'still'
 
 # coin
-coin: Actor = Actor(image=game_constants.coin_images[0], center=game_constants.coin_position_level_one)
+coin: Actor = Actor(image=game_constants.coin_images[0])
 coin_frame = 0
 coin_animation_counter = 0
 coin_animation_interval = 10
+coin_index = 0
 
 # flag
 flag = Actor(image=game_constants.flag_image)

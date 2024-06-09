@@ -19,7 +19,6 @@ def update_enemy_position():
     distance_y = target_y - state.enemy.y
 
     state.enemy.angle += 5
-    print(state.enemy.angle)
     if state.enemy.angle >= 360:
         state.enemy.angle = 0
 

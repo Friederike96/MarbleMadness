@@ -28,6 +28,10 @@ def draw():
     elif state.game_state == GameState.COUNTDOWN:
         fill_screen_with_map()
         state.marble.draw()
+        if state.enemy:
+            state.enemy.draw()
+        if state.coin:
+            state.coin.draw()
         draw_countdown_message()
 
     elif state.game_state == GameState.LEVEL_GAME:
@@ -39,7 +43,7 @@ def draw():
 
         if state.enemy:
             state.enemy.draw()
-        if state.coin_score != 6:  # todo add bool value
+        if state.coin and state.coin_score != 6:  # todo add bool value
             state.coin.draw()
 
     elif state.game_state == GameState.GAME_OVER:

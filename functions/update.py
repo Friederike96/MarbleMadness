@@ -73,7 +73,7 @@ def update():
 
         # timer still running
         else:
-            if state.marble.colliderect(state.coin) and state.score != 2:
+            if state.coin and state.marble.colliderect(state.coin) and state.score != 2:
                 state.coin.x = random.randint(150, 450)
                 state.coin.y = random.randint(45, 500)
                 state.coin_score += 250
@@ -82,12 +82,14 @@ def update():
             move_marble()
             state.marble.speed = max(0, state.marble.speed - 0.01)
 
-            handle_enemy_collision()
-            update_enemy_position()
+            if state.enemy:
+                handle_enemy_collision()
+                update_enemy_position()
 
-            handle_coin_collision()
-            update_coin_position()
-            animate_coin()
+            if state.coin:
+                handle_coin_collision()
+                update_coin_position()
+                animate_coin()
 
             if check_collision_with_flag(state.marble, state.flag):
                 state.game_state = GameState.LEVEL_WIN

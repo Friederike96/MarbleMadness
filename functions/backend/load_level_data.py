@@ -1,3 +1,6 @@
+import json
+import os.path
+
 import constants.game_constants as game_constants
 import constants.state as state
 from enumerations.level_state import LevelState
@@ -5,44 +8,37 @@ from pygame import image
 
 
 def load_level_data():
+    level = state.current_level.value
+    data_dict = game_constants.level_data_dict
 
-    if state.current_level == LevelState.LEVEL_ONE:
-        state.current_map = game_constants.level_one
-        state.current_heightmap = game_constants.level_one_heightmap
-        state.current_map_position = game_constants.level_one_map_position
+    state.current_map = data_dict[level]['map']
+    state.current_heightmap = data_dict[level]['heightmap']
+    state.current_map_position = data_dict[level]['map_position']
 
-        state.marble.dir = state.marble.speed = 0
-        state.marble.pos = game_constants.marble_position_level_one
-        state.marbleh.pos = game_constants.marbleh_position_level_one
+    state.timer = data_dict[level]['timer']
+    state.countdown_timer = state.timer
 
-        state.timer = game_constants.timer_level_one
-        state.countdown_timer = int(state.timer)
+    state.marble.dir = state.marble.speed = 0
+    state.marble.pos = data_dict[level]['marble_position']
+    state.marbleh.pos = data_dict[level]['marbleh_position']
 
-        state.previous_timer_value = 0
+    state.flag.pos = data_dict[level]['flag_position']
 
-        state.marble_moved_once = False
+    game_constants.enemy_positions = data_dict[level]['enemy_positions']
+    if game_constants.enemy_positions:
+        state.enemy.pos = game_constants.enemy_positions[state.enemy_index]
+    else:
+        state.enemy = None
 
-    elif state.current_level == LevelState.LEVEL_TWO:
-        state.current_map = game_constants.level_two
-        state.current_heightmap = game_constants.level_two_heightmap
-        state.current_map_position = game_constants.level_two_map_position
+    game_constants.coin_positions = data_dict[level]['coin_positions']
+    if game_constants.coin_positions:
+        state.coin.pos = game_constants.coin_positions[state.coin_index]
+    else:
+        state.coin = None
 
-        state.marble.dir = state.marble.speed = 0
-        state.marble.pos = game_constants.marble_position_level_two
-        state.marbleh.pos = game_constants.marbleh_position_level_two
 
-        state.timer = game_constants.timer_level_two
-        state.countdown_timer = int(state.timer)
-
-        state.previous_timer_value = 0
-        state.marble_moved_once = False
-
-    elif state.current_level == LevelState.LEVEL_THREE:
-        # TODO
-        pass
-
-    elif state.current_level == LevelState.LEVEL_FOUR:
-        # TODO
-        pass
+    # todo: general data, make function from this
+    state.previous_timer_value = 0
+    state.marble_moved_once = False
 
     state.heightmap = image.load(state.current_heightmap)
