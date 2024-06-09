@@ -1,6 +1,7 @@
 # Marble Madness
 
 import pgzrun
+import pygame
 from pgzero.screen import Screen
 from pygame import Surface
 
@@ -10,6 +11,10 @@ from functions.draw import draw
 from functions.initialize_joystick import initialize_joystick
 from functions.process_input import process_input
 from functions.update import update
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
 
 # do not delete, needed here
 HEIGHT = 760
@@ -22,6 +27,7 @@ load_json_data()
 surf = Surface(size=[WIDTH, HEIGHT])
 pgzrun.mod.screen = Screen(surface=surf)
 state.screen = pgzrun.mod.screen
+
 pgzrun.go()
 
 # while True:

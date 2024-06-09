@@ -1,3 +1,6 @@
+import pgzrun
+import pygame
+
 from constants import state
 from enumerations.color import Color
 from enumerations.game_state import GameState
@@ -20,6 +23,9 @@ def draw():
     if state.game_state == GameState.START_PAGE:
         fill_screen_black()
         draw_start_page_message()
+        pygame.draw.polygon(pgzrun.mod.screen.surface, (255, 0, 0),
+                            [[300, 300], [100, 400], [100, 300], [150, 300]])
+
 
     elif state.game_state == GameState.MENU_PAGE:
         fill_screen_black()
