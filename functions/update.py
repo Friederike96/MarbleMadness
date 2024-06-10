@@ -13,7 +13,7 @@ from enumerations.level_state import LevelState
 from functions.process_input import process_input
 from functions.backend.add_scores_during_game_play import add_scores_during_game_play
 from functions.backend.animate_coin import animate_coin
-from functions.backend.check_collision import check_collision_with_flag
+from functions.backend.check_collision import check_collision_with_flag, check_collision_with_finish_box
 from functions.backend.handle_button_selection import handle_button_selection
 from functions.backend.increment_level import increment_level
 from functions.backend.load_level_data import load_level_data
@@ -81,7 +81,8 @@ def update():
 
             update_marble_position()
             move_marble()
-            state.marble.speed = max(0, state.marble.speed - 0.01)
+            marble_physics()
+            state.marble.speed = max(0, state.marble.speed - state.friction)
 
             if state.enemy:
                 handle_enemy_collision()
@@ -92,7 +93,8 @@ def update():
                 update_coin_position()
                 animate_coin()
 
-            if check_collision_with_flag(state.marble, state.flag):
+            # if check_collision_with_flag(state.marble, state.flag):
+            if check_collision_with_finish_box():
                 state.game_state = GameState.LEVEL_WIN
                 state.sounds.enemysound.set_volume(0.1)
 
@@ -143,6 +145,24 @@ def add_points_for_remaining_time():
     state.coin_score = 0
 
     state.score_for_current_level = 0
+
+
+def marble_physics():
+    if marble_on_steep_map():
+        state.marble.acceleration += state.gravity
+        state.marble.speed = min(state.marble.speed + state.marble.acceleration, 1.5)
+    else:
+        state.marble.acceleration = 0
+        state.marble.speed = max(0, state.marble.speed - state.friction)
+
+
+def marble_on_steep_map():
+    marble_pos = (int(state.marble.x - state.steep_map.left), int(state.marble.y - state.steep_map.top))
+    try:
+        print(f'steep map: {state.steep_map_mask.get_at(marble_pos)}')
+        return state.steep_map_mask.get_at(marble_pos)
+    except Exception as e:
+        print(e)
 
 
 def reset_state():

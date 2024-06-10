@@ -21,11 +21,11 @@ def update_marble_position():
         state.marble_moved_once = True
 
     if keyboard.up or (state.joystick is not None and state.joystick.get_axis(1) < -state.DEAD_ZONE):
-        state.marble.y += 2  # Passe die Geschwindigkeit nach Bedarf an
+        state.marble.y -= 2  # Passe die Geschwindigkeit nach Bedarf an
         state.marble.speed = min(1, state.marble.speed + 0.1)
         state.marble_moved_once = True
 
     if keyboard.down or (state.joystick is not None and state.joystick.get_axis(1) > state.DEAD_ZONE):
-        state.marble.y -= 2  # Passe die Geschwindigkeit nach Bedarf an
+        state.marble.y += 2  # Passe die Geschwindigkeit nach Bedarf an
         state.marble.speed = min(1, state.marble.speed + 0.1)
         state.marble_moved_once = True

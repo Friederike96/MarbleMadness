@@ -23,9 +23,6 @@ def draw():
     if state.game_state == GameState.START_PAGE:
         fill_screen_black()
         draw_start_page_message()
-        pygame.draw.polygon(pgzrun.mod.screen.surface, (255, 0, 0),
-                            [[300, 300], [100, 400], [100, 300], [150, 300]])
-
 
     elif state.game_state == GameState.MENU_PAGE:
         fill_screen_black()
@@ -42,10 +39,15 @@ def draw():
 
     elif state.game_state == GameState.LEVEL_GAME:
         fill_screen_with_map()
+        state.finish_map.draw()
+        state.map3d.draw()
+        state.steep_map.draw()
+
         draw_timer_and_score_info()
+        if state.flag:
+            state.flag.draw()
 
         state.marble.draw()
-        state.flag.draw()
 
         if state.enemy:
             state.enemy.draw()

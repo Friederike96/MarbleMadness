@@ -2,7 +2,7 @@ import pygame
 from pgzero.actor import Actor
 from pgzero.loaders import SoundLoader
 from pgzero.screen import Screen
-from pygame import image
+from pygame import image, mask
 from pygame.joystick import Joystick
 
 import constants.game_constants as game_constants
@@ -17,7 +17,17 @@ current_level: LevelState = LevelState.LEVEL_ONE
 game_over_state: GameOverState = GameOverState.UNKNOWN
 selected_button: Button = Button.PLAY
 
+map3d = None
+map_mask = None
 
+steep_map: Actor = None
+steep_map_mask: mask = None
+
+finish_map: Actor = None
+finish_mask: mask = None
+
+gravity = 0.1
+friction = 0.02
 
 screen: Screen = None
 
@@ -41,6 +51,7 @@ current_map_position: set = ()
 marble: Actor = Actor(image=game_constants.marble_still_frames[0])
 marbleh: Actor = Actor(image=game_constants.marble_still_frames[0])
 marble.dir = marble.speed = 0
+marble.acceleration = 0
 marble_moved_once: bool = False
 
 # marble animation
@@ -58,8 +69,6 @@ coin_index = 0
 
 # flag
 flag = Actor(image=game_constants.flag_image)
-flag.x = 248  # todo in constants
-flag.y = 500
 
 # enemy
 enemy = Actor(image=game_constants.enemy_image)

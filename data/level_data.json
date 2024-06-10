@@ -18,11 +18,17 @@
     "level_one": {
         "map": "level_1/map.png",
         "heightmap": "images/level_1/heightmap.png",
+        "map3d": "images/level_1/map3d.png",
+        "map3d_short": "level_1/map3d.png",
+        "mapslide": "images/level_1/mapslidee.png",
+        "mapslide_short": "level_1/mapslidee.png",
+        "mapfinish": "images/level_1/mapfinish.png",
+        "mapfinish_short": "level_1/mapfinish.png",
         "map_position": [50, 0],
         "timer": 30,
         "marble_position": [450, 45],
         "marbleh_position": [450, 60],
-        "flag_position": [248, 500],
+        "flag_position": null,
         "coin_positions": [
             [250, 45],
             [0, 0],
