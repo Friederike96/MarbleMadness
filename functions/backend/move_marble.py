@@ -31,8 +31,8 @@ def move_marble():
     state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * -10
 
     if state.marble.angle > 0:
-        state.marble.angle = -50
-    elif state.marble.angle < -50:
+        state.marble.angle = 0
+    elif state.marble.angle < 0:
         state.marble.angle = 0
 
     # Abfrage ob man im Ziel ist
