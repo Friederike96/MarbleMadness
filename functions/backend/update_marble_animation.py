@@ -23,7 +23,7 @@ def update_marble_animation():
     if state.marble_animation_counter >= state.marble_animation_interval:
         state.marble_animation_counter = 0
 
-        if state.current_direction == 'still':
+        if state.current_direction == 'still':  # todo make enum
             state.marble.image = game_constants.marble_still_frames[0]
         elif state.current_direction == 'right':
             state.marble.image = game_constants.marble_right_frames[state.marble_frame % len(game_constants.marble_right_frames)]
