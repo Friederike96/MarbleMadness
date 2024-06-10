@@ -18,11 +18,18 @@ btn_play = Actor('btn_play')
 marble = Actor('marble_still1', center=(300, 45))
 marbleh = Actor('marble_still1', center=(300, 60))
 marble.dir = marble.speed = 0
+marble.acceleration = 0
+gravity = 0.1
+friction = 0.02
 
-# Load the 3D map as an actor and create a mask
+# Load the 3D map and the steep terrain map as actors and create masks
 map3d = Actor('map3d', topleft=(0, 0))
 map_image = image.load('images/map3d.png')
 map_mask = mask.from_surface(map_image)
+
+steep_map = Actor('mapslidee', topleft=(0, 0))
+steep_map_image = image.load('images/mapslidee.png')
+steep_map_mask = mask.from_surface(steep_map_image)
 
 debug = False
 timer = 30
@@ -91,6 +98,7 @@ def draw():
             screen.draw.text('Time: ' + str(round(timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
             map3d.draw()
+            steep_map.draw()
             marble.draw()
             enemy.draw()
             flag.draw()
@@ -120,7 +128,6 @@ def draw():
 
 def update():
     global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle, coin_frame, coin_animation_counter
-
 
     # Handle music based on game state
     if game_state == 3:
@@ -194,14 +201,14 @@ def update():
         coinscore += 1
         sounds.sfx_coin_single1.play()
     elif marble.colliderect(coin) and score == 3:
-        coin.x = 360
-        coin.y = 200
+        coin.x = 500
+        coin.y = 420
         score += 1
         coinscore += 1
         sounds.sfx_coin_single1.play()
     elif marble.colliderect(coin) and score == 4:
-        coin.x = 240
-        coin.y = 400
+        coin.x = 40
+        coin.y = 520
         score += 1
         coinscore += 1
         sounds.sfx_coin_single1.play()
@@ -211,21 +218,22 @@ def update():
         sounds.sfx_coin_single1.play()
 
     if game_state == 3:
-        if keyboard.left: #or joystick.get_axis(0) < -0.1:
+        if keyboard.left:
             marble.dir = max(marble.dir - 0.1, -1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.right: #or joystick.get_axis(0) > 0.1:
+        if keyboard.right:
             marble.dir = min(marble.dir + 0.1, 1)
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.up: #or joystick.get_axis(1) < 0.1:
+        if keyboard.up:
             marbleh.y -= 2.5
             marble.speed = min(1, marble.speed + 0.1)
-        if keyboard.down: #or joystick.get_axis(1) > 0.1:
+        if keyboard.down:
             marbleh.y += 2.5
             marble.speed = min(1, marble.speed + 0.1)
 
     move_marble()
-    marble.speed = max(0, marble.speed - 0.026)
+    marble_physics()
+    marble.speed = max(0, marble.speed - friction)
     animate_coin()
 
 def on_key_down(key):
@@ -265,25 +273,26 @@ def move_marble():
     update_marble_animation()
 
 def marble_on_map3d():
-    # Check if the marble is within the non-transparent area of the map
     marble_pos = (int(marble.x - map3d.left), int(marble.y - map3d.top))
     return map_mask.get_at(marble_pos)
+
+def marble_on_steep_map():
+    marble_pos = (int(marble.x - steep_map.left), int(marble.y - steep_map.top))
+    return steep_map_mask.get_at(marble_pos)
 
 def update_marble_animation():
     global marble_frame, marble_animation_counter, current_direction
 
-    # Determine the direction
     if marble.speed > 0:
         if marble.dir > 0.5:
             new_direction = 'right'
         elif marble.dir < -0.5:
-            new_direction = 'left'  # Add frames for left if needed
+            new_direction = 'left'
         else:
             new_direction = 'bottom_right'
     else:
         new_direction = 'still'
 
-    # If direction changes, reset the frame counter
     if new_direction != current_direction:
         current_direction = new_direction
         marble_frame = 0
@@ -316,13 +325,21 @@ def animate_coin():
         coin_frame += 1
 
 def check_collision_with_shuriken(marble, shuriken):
-    # Define a smaller rectangle for the shuriken
     shuriken_hitbox = Rect(shuriken.x - shuriken.width / 4, shuriken.y - shuriken.height / 4, shuriken.width / 2, shuriken.height / 2)
     return marble.colliderect(shuriken_hitbox)
 
 def check_collision_with_flag(marble, flag):
-    # Define a smaller rectangle for the flag
     flag_hitbox = Rect(flag.x - flag.width / 60, flag.y - flag.height / 60, flag.width / 60, flag.height / 60)
     return marble.colliderect(flag_hitbox)
+
+def marble_physics():
+    global marble
+
+    if marble_on_steep_map():
+        marble.acceleration += gravity
+        marble.speed = min(marble.speed + marble.acceleration, 1.5)
+    else:
+        marble.acceleration = 0
+        marble.speed = max(0, marble.speed - friction)
 
 pgzrun.go()
