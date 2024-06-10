@@ -1,19 +1,18 @@
 {
     "level_entry": {
-        "map": "",
-        "heightmap": "",
+        "map": "level_0/map.png",
+        "heightmap": "images/level_0/heightmap.png",
         "map_position": [0, 0],
-        "timer": 40,
-        "marble_position": [550, 45],
-        "marbleh_position": [550, 60],
+        "timer": 60,
+        "marble_position": [360, 30],
+        "marbleh_position": [360, 30],
         "flag_position": [365, 150],
         "coin_positions": [
-            [250, 45],
-            [0, 0],
-            [0, 0],
-            [0, 0]
+            [250, 45]
         ],
-        "enemy_positions": null
+        "enemy_positions": [
+            [300, 350]
+        ]
     },
     "level_one": {
         "map": "level_1/map.png",
@@ -38,11 +37,11 @@
     },
     "level_two": {
         "map": "level_2/map.png",
-        "heightmap": "images/level_2/heightmap_skaliert.png",
+        "heightmap": "images/level_2/heightmap.png",
         "map_position": [0, 0],
         "timer": 40,
-        "marble_position": [550, 45],
-        "marbleh_position": [550, 60],
+        "marble_position": [400, 30],
+        "marbleh_position": [400, 30],
         "flag_position": [365, 150],
         "coin_positions": [
             [250, 45],
@@ -58,8 +57,8 @@
         ]
     },
     "level_three": {
-        "map": "",
-        "heightmap": "",
+        "map": "level_3/map.png",
+        "heightmap": "images/level_3/heightmap_skaliert.png",
         "map_position": [0, 0],
         "timer": 40,
         "marble_position": [550, 45],

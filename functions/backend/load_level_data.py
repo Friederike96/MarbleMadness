@@ -40,5 +40,6 @@ def load_level_data():
     # todo: general data, make function from this
     state.previous_timer_value = 0
     state.marble_moved_once = False
+    state.not_added_points_and_incremented = True
 
     state.heightmap = image.load(state.current_heightmap)

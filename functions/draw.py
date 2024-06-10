@@ -1,4 +1,4 @@
-from constants import state
+from constants import state, game_constants
 from enumerations.color import Color
 from enumerations.game_state import GameState
 from functions.frontend.draw_countdown_message import draw_countdown_message
