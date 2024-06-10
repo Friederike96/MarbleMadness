@@ -1,6 +1,6 @@
 import pgzrun
 import pygame
-from pygame import image
+from pygame import image, mask
 from pgzero.builtins import Actor, keyboard, music, sounds
 
 # Initialize window size
@@ -19,8 +19,10 @@ marble = Actor('marble_still1', center=(300, 45))
 marbleh = Actor('marble_still1', center=(300, 60))
 marble.dir = marble.speed = 0
 
-# Load the 3D map as an actor
+# Load the 3D map as an actor and create a mask
 map3d = Actor('map3d', topleft=(0, 0))
+map_image = image.load('images/map3d.png')
+map_mask = mask.from_surface(map_image)
 
 debug = False
 timer = 30
@@ -118,6 +120,7 @@ def draw():
 
 def update():
     global timer, game_state, score, coinscore, enemy, target_index, shuriken_angle, coin_frame, coin_animation_counter
+
 
     # Handle music based on game state
     if game_state == 3:
@@ -251,7 +254,7 @@ def on_mouse_down(pos):
 def move_marble():
     global game_state, marble_frame, marble_animation_counter, current_direction
 
-    if marbleh.x < 0 or marbleh.x > WIDTH or marbleh.y < 0 or marbleh.y > HEIGHT:
+    if not marble_on_map3d():
         game_state = 6
 
     marbleh.x += marble.speed * marble.dir
@@ -260,6 +263,11 @@ def move_marble():
     marble.y = marbleh.y
 
     update_marble_animation()
+
+def marble_on_map3d():
+    # Check if the marble is within the non-transparent area of the map
+    marble_pos = (int(marble.x - map3d.left), int(marble.y - map3d.top))
+    return map_mask.get_at(marble_pos)
 
 def update_marble_animation():
     global marble_frame, marble_animation_counter, current_direction
