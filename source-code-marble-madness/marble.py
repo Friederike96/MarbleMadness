@@ -18,7 +18,10 @@ btn_play = Actor('btn_play')
 marble = Actor('marble_still1', center=(300, 45))
 marbleh = Actor('marble_still1', center=(300, 60))
 marble.dir = marble.speed = 0
-heightmap = image.load('images/height45.png')
+
+# Load the 3D map as an actor
+map3d = Actor('map3d', topleft=(0, 0))
+
 debug = False
 timer = 30
 score = 0
@@ -57,7 +60,6 @@ marble_bottom_frames = ['marble_bottom1', 'marble_bottom2', 'marble_bottom3', 'm
 marble_bottom_left_frames = ['marble_bottom_left1', 'marble_bottom_left2', 'marble_bottom_left3', 'marble_bottom_left4', 'marble_bottom_left5', 'marble_bottom_left6', 'marble_bottom_left7']
 marble_left_frames = ['marble_left1', 'marble_left2', 'marble_left3', 'marble_left4', 'marble_left5']
 
-
 # Initialize animation variables
 marble_animation_counter = 0
 marble_animation_interval = 6
@@ -68,7 +70,7 @@ def draw():
     global game_state
     global curr_level
     if debug:
-        screen.blit("height45", (0, 0))
+        map3d.draw()
         marbleh.draw()
     else:
         if game_state == 0:
@@ -86,6 +88,7 @@ def draw():
             screen.blit("map", (0, 0))
             screen.draw.text('Time: ' + str(round(timer, 2)), (10, 10), color=(255, 255, 255), fontsize=30)
             screen.draw.text('Score: ' + str(score), (500, 10), color=(255, 255, 255), fontsize=30)
+            map3d.draw()
             marble.draw()
             enemy.draw()
             flag.draw()
@@ -195,7 +198,7 @@ def update():
         sounds.sfx_coin_single1.play()
     elif marble.colliderect(coin) and score == 4:
         coin.x = 240
-        coin.y = 520
+        coin.y = 400
         score += 1
         coinscore += 1
         sounds.sfx_coin_single1.play()
@@ -245,40 +248,16 @@ def on_mouse_down(pos):
         elif btn_quit.collidepoint(pos):
             quit()
 
-def get_height(x, y):
-    if x < 0:
-        x = 0
-    elif x > WIDTH - 1:
-        x = WIDTH - 1
-    if y < 0:
-        y = 0
-    elif y > HEIGHT - 1:
-        y = HEIGHT - 1
-    return heightmap.get_at((int(x), int(y)))
-
 def move_marble():
     global game_state, marble_frame, marble_animation_counter, current_direction
-    center_column = get_height(marbleh.x, marbleh.y)
-    left_column = get_height(marbleh.x - 10, marbleh.y + 10)
-    right_column = get_height(marbleh.x + 10, marbleh.y + 10)
 
-    if center_column.r == 0:
+    if marbleh.x < 0 or marbleh.x > WIDTH or marbleh.y < 0 or marbleh.y > HEIGHT:
         game_state = 6
-
-    if left_column.r < center_column.r or right_column.r < center_column.r:
-        marble.y += marble.speed
-        marble.speed += 0.02
 
     marbleh.x += marble.speed * marble.dir
     marbleh.y += marble.speed
     marble.x = marbleh.x
-    marble.y = (marbleh.y * 0.6) + ((255 - center_column.r) * 1.25)
-    marble.angle = marble.angle + marble.speed * marble.dir * -10
-
-    if marble.angle > 0:
-        marble.angle = 0
-    elif marble.angle < 0:
-        marble.angle = 0
+    marble.y = marbleh.y
 
     update_marble_animation()
 
@@ -334,8 +313,8 @@ def check_collision_with_shuriken(marble, shuriken):
     return marble.colliderect(shuriken_hitbox)
 
 def check_collision_with_flag(marble, flag):
-    # Define a smaller rectangle for the shuriken
-    flag_hitbox = Rect(flag.x - flag.width / 75, flag.y - flag.height / 75, flag.width / 75, flag.height / 75)
+    # Define a smaller rectangle for the flag
+    flag_hitbox = Rect(flag.x - flag.width / 60, flag.y - flag.height / 60, flag.width / 60, flag.height / 60)
     return marble.colliderect(flag_hitbox)
 
 pgzrun.go()
