@@ -10,8 +10,8 @@ def move_marble():
         return
 
     center_column = get_height(state.marbleh.x, state.marbleh.y)
-    left_column = get_height(state.marbleh.x - 10, state.marbleh.y + 10)
-    right_column = get_height(state.marbleh.x + 10, state.marbleh.y + 10)
+    left_column = get_height(state.marbleh.x - game_constants.HEIGHTMAP_OFFSET, state.marbleh.y + game_constants.HEIGHTMAP_OFFSET)
+    right_column = get_height(state.marbleh.x + game_constants.HEIGHTMAP_OFFSET, state.marbleh.y + game_constants.HEIGHTMAP_OFFSET)
 
     if center_column is None:  # or center_column.r == 0:
         state.game_state = GameState.GAME_OVER  # reminder: change back
@@ -20,15 +20,19 @@ def move_marble():
 
     if left_column.r < center_column.r or right_column.r < center_column.r:
         state.marble.y += state.marble.speed
-        state.marble.speed += 0.03
+        state.marble.speed += game_constants.GRAVITY
 
     state.marbleh.x += state.marble.speed * state.marble.dir
     state.marbleh.y += state.marble.speed
     state.marble.x = state.marbleh.x
-    updated_marble_y = (state.marbleh.y * 0.6) + ((255 - center_column.r) * 1.25)
-    if updated_marble_y < state.marble.y + 200:# or (state.level_timer - state.timer) >= 2:
-        state.marble.y = updated_marble_y
-    state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * -10
+
+    # die in Berechnung in Zeile 33 ist lediglich eine Skalierung welche für die vorgegebene Map notwending ist.
+    # bei den anderen Maps wird dies nicht benötigt deshalb marble.y = marbleh.y
+    if state.current_level == LevelState.LEVEL_ENTRY or state.current_level.LEVEL_TWO:
+        state.marble.y = state.marbleh.y
+    elif state.current_level == LevelState.LEVEL_ONE:
+        state.marble.y = (state.marbleh.y * 0.6) + ((game_constants.MAX_HEIGHTMAP_VALUE - center_column.r) * game_constants.HEIGHTMAP_VERTICAL_SCALE)
+    state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * - 10
 
     if state.marble.angle > 0:
         state.marble.angle = -50

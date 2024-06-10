@@ -5,7 +5,25 @@ from pygame import image
 
 
 def load_level_files():
-    if state.current_level == LevelState.LEVEL_ONE:
+    if state.current_level == LevelState.LEVEL_ENTRY:
+        state.current_map = game_constants.level_zero
+        state.current_heightmap = game_constants.level_zero_heightmap
+        state.current_map_position = game_constants.level_zero_map_position
+
+        state.marble.dir = state.marble.speed = 0
+        state.marble.pos = game_constants.marble_position_level_zero
+        state.marbleh.pos = game_constants.marbleh_position_level_zero
+
+        state.start_timer = False
+
+        state.timer = game_constants.timer_level_zero
+        state.countdown_timer = int(state.timer)
+
+        state.previous_clock_time = 0
+
+        state.marble_moved_once = False
+
+    elif state.current_level == LevelState.LEVEL_ONE:
         state.current_map = game_constants.level_one
         state.current_heightmap = game_constants.level_one_heightmap
         state.current_map_position = game_constants.level_one_map_position

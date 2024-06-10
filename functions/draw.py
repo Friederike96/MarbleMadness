@@ -28,6 +28,9 @@ def draw():
                 fontname=get_monospaced_font(),
                 fontsize=30
             )
+            state.screen.blit(game_constants.mm_logo,
+                              ((game_constants.center_position_width - game_constants.LOGO_OFFSET_WEIGHT),
+                               (game_constants.center_position_height - game_constants.LOGO_OFFSET_HEIGHT)))
 
         elif state.game_state ==  GameState.MENU_PAGE:
             state.screen.fill((0, 0, 0))
@@ -38,8 +41,13 @@ def draw():
             print("menu maybe?")
 
         elif state.game_state == GameState.COUNTDOWN:
-            #state.marble.x = state.marble_start_pos_x
-            #state.marble.y = state.marble_start_pos_y
+            # die haben die Anfangs Koordinaten umgehauen, muss aber glaube ich wieder rein..
+            # state.marble.x = state.marble_start_pos_x
+            # state.marble.y = state.marble_start_pos_y
+
+            # print("+++++++++++++++++ DRAW +++++++++++++++++++")
+            # print(state.marble.x, state.marble.y)
+            #print(state.marbleh.x, state.marbleh.y)
             state.marble.draw()
             state.screen.blit(state.current_map, state.current_map_position)
             state.screen.draw.text(

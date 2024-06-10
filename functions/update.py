@@ -180,9 +180,10 @@ def update():
                 state.marble.speed = min(1, state.marble.speed + 0.1)
                 state.marble_moved_once = True
 
-            move_marble()
-            animate_coin()
-            state.marble.speed = max(0, state.marble.speed - 0.01)
+            if state.marble_moved_once:
+                move_marble()
+                animate_coin()
+                state.marble.speed = max(0, state.marble.speed - 0.01)
 
     # vom gewonnen Level zum nächsten oder Spiel beenden
     elif state.game_state == GameState.LEVEL_WIN:

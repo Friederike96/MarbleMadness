@@ -1,5 +1,7 @@
-
 import os
+import pygame.image
+
+from pygame import transform
 
 # not used, defined in marble.py
 HEIGHT = 760
@@ -66,9 +68,34 @@ enemy_image = 'enemy/shurikensml.png'
 # enemy positions
 enemy_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]
 
+# Marble Madness logo
+LOGO_OFFSET_HEIGHT = 300
+LOGO_OFFSET_WEIGHT = 150
+mm_logo = os.path.join(base_path, 'images', 'objects', 'mm-logo.png')
+mm_logo = transform.scale(pygame.image.load(mm_logo), (300, 156))
+
+# Heightmap Marble Radius
+HEIGHTMAP_OFFSET = 2
+# Zahl Null
+ZERO = 0
+# für move_marble
+GRAVITY = 0.03
+MAX_HEIGHTMAP_VALUE = 255
+HEIGHTMAP_VERTICAL_SCALE = 1.25
+
+# level zero
+level_zero = os.path.join(base_path, "images", "level_0", "level_0.png")
+level_zero_heightmap = os.path.join(base_path, "images", "level_0", "level_0_heightmap.png")
+level_zero_map_position = (0, 0)
+
+marble_position_level_zero = (360, 30)
+marbleh_position_level_zero = (360, 30)
+
+timer_level_zero = 60
+
 # level one
 level_one = 'level_1/map.png'
-level_one_heightmap ='images/level_1/heightmap.png'
+level_one_heightmap = os.path.join(base_path, "images", "level_1", "heightmap.png")
 level_one_map_position = (50, 0)
 
 marble_position_level_one = (450, 45)
@@ -80,18 +107,25 @@ coin_position_level_one = (250, 45)
 
 timer_level_one = 30
 
+# wird alles auskommentiert weil nicht weiß ob mans braucht - alte Map von Friederike
 # level two
-level_two = 'level_2/map.png'
-level_two_heightmap = 'images/level_2/heightmap_skaliert.png'
+# level_two = 'level_2/map.png'
+# level_two_heightmap = 'images/level_2/heightmap_skaliert.png'
+# level_two_map_position = (0, 0)
+# marble_position_level_two = (500, 45)
+# marbleh_position_level_two = (500, 60)
+# overlay_position_level_two = (365, 150)
+# coin_position_level_two = (150, 45)
+# timer_level_two = 40
+
+# level two von Nour und Serkay
+level_two = os.path.join(base_path, "images", "level_3", "level_keasev2.png")
+level_two_heightmap = os.path.join(base_path, "images", "level_3", "level_kease_heightmap.png")
 level_two_map_position = (0, 0)
 
-marble_position_level_two = (550, 45)
-marbleh_position_level_two = (550, 60)
-
-flag_position_level_two = (365, 150)
-
-coin_position_level_two = (150, 45)
-
+marble_position_level_two = (400, 30)
+marbleh_position_level_two = (400, 30)
+overlay_position_level_two = (0, 0)
 timer_level_two = 40
 
 # menu
@@ -103,7 +137,7 @@ enter_button_pos_y = center_position_height
 start_button_image = 'buttons/btn_start'
 start_button_pos_y = 300
 
-quit_button_image ='buttons/btn_quit'
+quit_button_image = 'buttons/btn_quit'
 quit_button_pos_y = 400
 
 back_button_image = 'buttons/btn_back'

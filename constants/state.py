@@ -12,7 +12,7 @@ from enumerations.level_state import LevelState
 
 # game states
 game_state: GameState = GameState.START_PAGE
-current_level: LevelState = LevelState.LEVEL_ONE
+current_level: LevelState = LevelState.LEVEL_ENTRY
 game_over_state: GameOverState = GameOverState.UNKNOWN
 
 screen: Screen = None
@@ -42,8 +42,8 @@ current_map_position: set = ()
 flag_position: set = game_constants.flag_position_level_one
 
 # marble
-marble: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marble_position_level_one)
-marbleh: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marbleh_position_level_one)
+marble: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marble_position_level_zero)
+marbleh: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marbleh_position_level_zero)
 marble.dir = marble.speed = 0
 marble_moved_once: bool = False
 
