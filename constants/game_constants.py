@@ -7,10 +7,27 @@ from pygame import transform
 HEIGHT = 760
 WIDTH = 900
 
-base_path = os.getcwd()
+# center position
+center_position_width = WIDTH/2
+center_position_height = HEIGHT/2
 
+level_data_path = 'data/level_data.json'
+level_data_dict: dict
+
+enemy_positions: list
+
+coin_positions: list
+
+# fonts
+marble_madness = 'marble_madness'
+courier_new = 'couriernew'
+
+
+
+# todo: following also in json?
 marble_image = 'objects/marble.png'
 
+# todo: make state for marble rotation ?
 marble_still_frames = [
     'marble/marble_still1'
 ]  # Add the still images if you have more
@@ -61,7 +78,6 @@ coin_images = [
     'coin/coinpos4.png'
 ]
 
-overlay_image = 'objects/overlay.png'
 flag_image = 'flag/blueflag.png'
 enemy_image = 'enemy/shurikensml.png'
 

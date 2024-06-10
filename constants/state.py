@@ -6,6 +6,7 @@ from pygame import image
 from pygame.joystick import Joystick
 
 import constants.game_constants as game_constants
+from enumerations.button import Button
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
@@ -14,6 +15,9 @@ from enumerations.level_state import LevelState
 game_state: GameState = GameState.START_PAGE
 current_level: LevelState = LevelState.LEVEL_ENTRY
 game_over_state: GameOverState = GameOverState.UNKNOWN
+selected_button: Button = Button.PLAY
+
+
 
 screen: Screen = None
 
@@ -21,12 +25,6 @@ start_game: bool = True
 
 # Joystick
 joystick: Joystick = None
-
-# Buttons
-# TODO
-
-play_game_color: str = 'orange'
-quit_color: str = 'white'
 
 # current map and heightmap, set in load_level_files
 current_map: str = ''
@@ -38,12 +36,9 @@ heightmap: image = None
 # position of map and heightmap, depends on level
 current_map_position: set = ()
 
-# position of flag
-flag_position: set = game_constants.flag_position_level_one
-
 # marble
-marble: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marble_position_level_zero)
-marbleh: Actor = Actor(image=game_constants.marble_still_frames[0], center=game_constants.marbleh_position_level_zero)
+marble: Actor = Actor(image=game_constants.marble_still_frames[0])
+marbleh: Actor = Actor(image=game_constants.marble_still_frames[0])
 marble.dir = marble.speed = 0
 marble_moved_once: bool = False
 
@@ -54,10 +49,11 @@ marble_frame = 0
 current_direction = 'still'
 
 # coin
-coin: Actor = Actor(image=game_constants.coin_images[0], center=game_constants.coin_position_level_one)
+coin: Actor = Actor(image=game_constants.coin_images[0])
 coin_frame = 0
 coin_animation_counter = 0
 coin_animation_interval = 10
+coin_index = 0
 
 # flag
 flag = Actor(image=game_constants.flag_image)
@@ -68,8 +64,8 @@ flag.y = 500
 enemy = Actor(image=game_constants.enemy_image)
 enemy.x = 130  # todo in constants
 enemy.y = 170
+enemy.angle = 0
 enemy_speed = 1
-enemy_angle = 0
 enemy_index = 0
 
 # sounds
@@ -77,8 +73,7 @@ sounds = SoundLoader('music/sounds')
 
 # timer
 timer: int = 0
-start_timer = False
-previous_clock_time: int = 0
+previous_timer_value: int = 0
 
 # scores
 score: int = 0
@@ -98,7 +93,7 @@ score_for_current_level = 0
 deducted_score_for_lost_level: bool = False
 
 # needed for determine which color to use when blinking (level won or game over message)
-colorful: bool = False
+blue_text: bool = False
 
 # needed for displaying blinking score when won level
 wait_counter_for_score_display: int = 10

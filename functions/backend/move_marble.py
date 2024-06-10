@@ -2,7 +2,7 @@ from constants import state, game_constants
 from enumerations.game_over_state import GameOverState
 from enumerations.game_state import GameState
 from enumerations.level_state import LevelState
-from functions.frontend.update_marble_animation import update_marble_animation
+from functions.backend.update_marble_animation import update_marble_animation
 
 
 def move_marble():
@@ -13,7 +13,7 @@ def move_marble():
     left_column = get_height(state.marbleh.x - game_constants.HEIGHTMAP_OFFSET, state.marbleh.y + game_constants.HEIGHTMAP_OFFSET)
     right_column = get_height(state.marbleh.x + game_constants.HEIGHTMAP_OFFSET, state.marbleh.y + game_constants.HEIGHTMAP_OFFSET)
 
-    if center_column is None:  # or center_column.r == 0:
+    if any([center_column, left_column, right_column]) is None:  # or center_column.r == 0:
         state.game_state = GameState.GAME_OVER  # reminder: change back
         state.game_over_state = GameOverState.FALL_OVER_EDGE
         return
@@ -35,8 +35,8 @@ def move_marble():
     state.marble.angle = state.marble.angle + state.marble.speed * state.marble.dir * - 10
 
     if state.marble.angle > 0:
-        state.marble.angle = -50
-    elif state.marble.angle < -50:
+        state.marble.angle = 0
+    elif state.marble.angle < 0:
         state.marble.angle = 0
 
     # Abfrage ob man im Ziel ist
