@@ -1,3 +1,5 @@
+import os
+
 # not used, defined in marble.py
 HEIGHT = 760
 WIDTH = 900
@@ -76,3 +78,23 @@ coin_images = [
 flag_image = 'flag/blueflag.png'
 enemy_image = 'enemy/shurikensml.png'
 
+# enemy positions
+enemy_positions = [(200, 130), (250, 160), (180, 200), (130, 170)]
+
+# menu
+center_position_width = WIDTH / 2
+center_position_height = HEIGHT / 2
+
+enter_button_pos_y = center_position_height
+
+start_button_image = 'buttons/btn_start'
+start_button_pos_y = 300
+
+quit_button_image = 'buttons/btn_quit'
+quit_button_pos_y = 400
+
+back_button_image = 'buttons/btn_back'
+back_button_pos_y = 400
+
+play_button_image = 'buttons/btn_play'
+play_button_pos_y = 400

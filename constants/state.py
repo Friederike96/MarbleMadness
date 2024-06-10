@@ -25,6 +25,7 @@ start_game: bool = True
 
 # Joystick
 joystick: Joystick = None
+DEAD_ZONE = 0.1
 
 # current map and heightmap, set in load_level_files
 current_map: str = ''

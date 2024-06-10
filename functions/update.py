@@ -1,6 +1,7 @@
 import random
 from time import sleep
 
+import pygame
 from pgzero import music
 from pgzero.builtins import keyboard
 
