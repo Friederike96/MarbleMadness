@@ -9,6 +9,5 @@ def check_collision_with_enemy(marble: Actor, enemy: Actor) -> bool:
 
 
 def check_collision_with_flag(marble: Actor, flag: Actor) -> bool:
-    # Define a smaller rectangle for the shuriken
     flag_hitbox = Rect(flag.x - flag.width / 75, flag.y - flag.height / 75, flag.width / 75, flag.height / 75)
     return marble.colliderect(flag_hitbox)

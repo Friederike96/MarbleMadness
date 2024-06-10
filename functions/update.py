@@ -143,38 +143,3 @@ def add_points_for_remaining_time():
 
     state.score_for_current_level = 0
 
-
-def reset_state():
-    state.countdown_timer = state.timer
-    state.wait_counter_for_game_over = 10
-    state.score_for_current_level = 0
-    state.deducted_score_for_lost_level = False
-
-
-def quit_game():
-    state.game_state = GameState.START_PAGE
-    state.current_level = LevelState.LEVEL_ONE
-
-    state.start_game = True
-
-    state.previous_timer_value = 0
-
-    state.blue_text = False
-    state.wait_counter_for_score_display = 10
-    state.wait_counter_for_game_over = 10
-
-    state.not_added_points_and_incremented = True
-
-    state.timer = 0
-    state.score = 0
-    state.coin_score = 0
-
-    state.score_for_current_level = 0
-    state.deducted_score_for_lost_level = False
-
-    state.display_coin_score = 0
-    state.display_timer_score = 0
-
-    state.countdown_timer = 0
-
-    sleep(0.2)

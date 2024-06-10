@@ -6,6 +6,8 @@ import constants.state as state
 from enumerations.level_state import LevelState
 from pygame import image
 
+from functions.backend.reset_state import reset_state
+
 
 def load_level_data():
     level = state.current_level.value
@@ -36,9 +38,6 @@ def load_level_data():
     else:
         state.coin = None
 
-
-    # todo: general data, make function from this
-    state.previous_timer_value = 0
-    state.marble_moved_once = False
+    reset_state()
 
     state.heightmap = image.load(state.current_heightmap)

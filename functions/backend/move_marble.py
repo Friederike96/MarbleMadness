@@ -13,7 +13,7 @@ def move_marble():
     left_column = get_height(state.marbleh.x - 10, state.marbleh.y + 10)
     right_column = get_height(state.marbleh.x + 10, state.marbleh.y + 10)
 
-    if any([center_column, left_column, right_column]) is None:  # or center_column.r == 0:
+    if center_column is None or left_column is None or right_column is None:  # or center_column.r == 0:
         state.game_state = GameState.GAME_OVER  # reminder: change back
         state.game_over_state = GameOverState.FALL_OVER_EDGE
         return
