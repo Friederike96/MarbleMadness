@@ -1,6 +1,3 @@
-import pgzrun
-import pygame
-
 from constants import state
 from enumerations.color import Color
 from enumerations.game_state import GameState

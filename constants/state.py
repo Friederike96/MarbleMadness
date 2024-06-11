@@ -26,7 +26,7 @@ steep_map_mask: mask = None
 finish_map: Actor = None
 finish_mask: mask = None
 
-gravity = 0.1
+gravity = 0.5
 friction = 0.02
 
 screen: Screen = None

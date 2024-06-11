@@ -45,6 +45,12 @@
     "level_two": {
         "map": "level_2/map.png",
         "heightmap": "images/level_2/heightmap_skaliert.png",
+        "map3d": "images/level_2/map3d.png",
+        "map3d_short": "level_2/map3d.png",
+        "mapslide": "images/level_2/mapslide.png",
+        "mapslide_short": "level_2/mapslide.png",
+        "mapfinish": "images/level_2/mapfinish.png",
+        "mapfinish_short": "level_2/mapfinish.png",
         "map_position": [0, 0],
         "timer": 40,
         "marble_position": [550, 45],

@@ -36,7 +36,7 @@ def load_level_data():
     state.marbleh.pos = data_dict[level]['marbleh_position']
 
     if data_dict[level]['flag_position']:
-        state.flag.pos = data_dict[level]['flag_position']
+        state.flag = Actor(game_constants.flag_image, data_dict[level]['flag_position'])
     else:
         state.flag = None
 
